@@ -1,4 +1,4 @@
-# Sonatype Lifeycle Microsoft Teams Integration
+# Sonatype Lifecycle Microsoft Teams Integration
 
 This project contains an example (working) Web Hook handler for Sonatype Lifecycle that can publish messages to a Microsoft Teams channel.
 
