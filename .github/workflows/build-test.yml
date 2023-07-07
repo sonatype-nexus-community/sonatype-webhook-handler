@@ -52,8 +52,13 @@ jobs:
             - uses: actions/setup-node@v3
               with:
                   node-version: 18
+
             - run: npm i
             - run: npm run build
+            - run: npx semantic-release
+
+            - name: Determine Version
+              run: echo "NEW_VERSION=$(npx semantic-release --version)" >> $GITHUB_ENV
 
             - name: Build and push
               uses: docker/build-push-action@v4
@@ -62,4 +67,4 @@ jobs:
                   file: ./Dockerfile
                   platforms: linux/arm64,linux/amd64
                   push: true
-                  tags: sonatypecommunity/sonatype-teams-webhook-handler:latest
+                  tags: sonatypecommunity/sonatype-teams-webhook-handler:latest , sonatypecommunity/sonatype-teams-webhook-handler:$NEW_VERSION
