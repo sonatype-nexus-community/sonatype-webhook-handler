@@ -54,7 +54,14 @@ You can quickly test the handler is able to post a message to Microsoft Teams by
 
 ### Connecting to Sonatype Lifecycle
 
-Simplym add http://localhost:3000/teams as a [WebHook to your Sonatype Lifecycle Server](https://help.sonatype.com/iqserver/automating/iq-server-webhooks).
+Simply add http://localhost:3000/teams as a [WebHook to your Sonatype Lifecycle Server](https://help.sonatype.com/iqserver/automating/iq-server-webhooks).
+
+Get your Sonatype Lifecycle Administrator to add a Webhook:
+1. System Preferences -> Webhooks
+2. + Add a Webhook
+3. Complete the details, ensuring the Event Type **Application Evaluation** is selected
+
+![Installation Step 1](./images/sonatype-iq-add-webhook.png)
 
 ## The Fine Print
 
