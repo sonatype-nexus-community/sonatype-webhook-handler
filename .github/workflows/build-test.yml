@@ -67,4 +67,4 @@ jobs:
                   file: ./Dockerfile
                   platforms: linux/arm64,linux/amd64
                   push: true
-                  tags: sonatypecommunity/sonatype-teams-webhook-handler:latest , sonatypecommunity/sonatype-teams-webhook-handler:$NEW_VERSION
+                  tags: sonatypecommunity/sonatype-teams-webhook-handler:latest , sonatypecommunity/sonatype-teams-webhook-handler:${{ env.NEW_VERSION }}
