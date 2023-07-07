@@ -1,0 +1,49 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.4",
+  "msteams": {"width": "Full"},
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "${title}",
+      "size": "Large",
+      "weight": "Bolder",
+      "wrap": true
+    },
+    {
+      "type": "TextBlock",
+      "text": "${stage}",
+      "isSubtle": true,
+      "color": "Accent",
+      "weight": "Bolder",
+      "size": "Small",
+      "spacing": "None"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Sonatype Lifecycle Evalation has completed for ${application} with the following results:"
+    },
+    {
+      "type": "TextBlock",
+      "color": "attention",
+      "size": "large",
+      "text": "⛔ ${critical} Components with CRITIAL Policy Violations",
+      "weight": "bolder"
+    },
+    {
+      "type": "TextBlock",
+      "color": "warning",
+      "size": "large",
+      "text": "⚠️ ${severe} Components with SEVERE Policy Violations",
+      "weight": "bolder"
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.OpenUrl",
+      "title": "See Report",
+      "url": "${reportUrl}"
+    }
+  ]
+}
