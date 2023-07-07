@@ -13,7 +13,9 @@ This project contains an example (working) Web Hook handler for Sonatype Lifecyc
    - Upload an Image of your choice
    - Note the Web Hook URL - you'll need that later!
 
-### This Handler
+### Running This Handler
+
+#### Manually
 
 You can run this on any Node 16 or Node 18 environment. 
 
@@ -25,6 +27,24 @@ You can run this on any Node 16 or Node 18 environment.
     TEAMS_WEBHOOK_URL=https://sonatype.webhook.office.com/webhookb2/... # the URL from step 4 above
    ```
 3. Start the handler by running `npm start` - the handler is now listening on http://localhost:3000/
+
+#### As a Container
+
+This webhook handler is published as a Docker Image to Docker Hub.
+
+An example `docker-compose.yml` might be:
+
+```
+services:
+   webhook-teams:
+    image: sonatype-teams-app-integration:latest
+    environment:
+      - IQ_SERVER_URL=[YOUR_IQ_SERVER_URL_HERE]
+      - PORT=3000
+      - TEAMS_WEBHOOK_URL=[YOUR MS TEAMS WEBHOOK URL HERE]
+    ports:
+      - '30000:3000'
+```
 
 ### Testing
 
