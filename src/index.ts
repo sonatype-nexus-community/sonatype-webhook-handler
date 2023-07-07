@@ -14,31 +14,40 @@
  * limitations under the License.
  */
 
+import express, { Express, Request, Response } from 'express';
 import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 import { WebhookTarget } from "./WebHookTarget";
 import template from "./templates/adaptive-card-default.json";
 import { IqWebhookPayload } from "./types";
 
-const express = require('express')
-const app = express()
+require('dotenv').config()
+const app: Express = express()
 app.use(express.json());
 
 /**
  * Fill in your incoming webhook url.
  */
-const IQ_SERVER_URL: string = process.env.IQ_URL
+const IQ_SERVER_URL: string = process.env.IQ_SERVER_URL
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
 const TEAMS_WEBHOOK_URL: string = process.env.TEAMS_WEBHOOK_URL
 const webhookTarget = new WebhookTarget(new URL(TEAMS_WEBHOOK_URL));
 
-app.post('/teams', function (req, res) {
-    console.log('WebHook received for Microsoft Teams')
+const IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION = 'iq:applicationEvaluation'
+
+app.post('/teams', function (req: Request, res: Response) {
+    const webhookId = req.get('X-Nexus-Webhook-Id')
+    const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
+    
+    // Response Immediately!
     res.send({status: 200})
-    sendAdaptiveCardForApplicationEvaluation(req.body)
-});
+    if (webhookId !== undefined && webhookId == IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION && webhookDelivery) {
+        console.log(`${IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION} WebHook Delivery ${webhookDelivery} received and being processed`)
+        sendAdaptiveCardForApplicationEvaluation(req.body)
+    }
+})
 
 
-app.get('/test', function (req, res) {
+app.get('/test', function (req: Request, res: Response) {
     console.log('Received request for test message')
     res.send({status: 200, message: "Success!"})
     let payload: IqWebhookPayload = {
@@ -92,3 +101,5 @@ function getIqUrlForApplicationEvaluation(payload: IqWebhookPayload): string {
 
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}/`)
+console.log(`   IQ SERVER at: ${IQ_SERVER_URL}`)
+console.log(`   MS TEAMS at: ${TEAMS_WEBHOOK_URL.substring(0, 128)}...`)
