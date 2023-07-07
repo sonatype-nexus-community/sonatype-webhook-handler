@@ -49,6 +49,12 @@ jobs:
                   username: ${{ secrets.REGISTRY_USERNAME }}
                   password: ${{ secrets.REGISTRY_TOKEN }}
 
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - run: npm i
+            - run: npm run build
+
             - name: Build and push
               uses: docker/build-push-action@v4
               with:
