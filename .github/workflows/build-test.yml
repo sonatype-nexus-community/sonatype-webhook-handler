@@ -58,7 +58,7 @@ jobs:
             - run: npx semantic-release
 
             - name: Determine Version
-              run: echo "NEW_VERSION=$(npx semantic-release --version)" >> $GITHUB_ENV
+              run: echo "NEW_VERSION=$(npm version | grep 'sonatype-teams-app-integration' | cut -d "'" -f4)" >> $GITHUB_ENV
 
             - name: Build and push
               uses: docker/build-push-action@v4
