@@ -12,6 +12,9 @@
         "email": "community-group@sonatype.com",
         "url": "https://github.com/sonatype-nexus-community"
     },
+    "repository": {
+        "url": "git@github.com:sonatype-nexus-community/sonatype-teams-app-integration.git"
+    },
     "engines": {
         "node": "16 || 18"
     },
@@ -34,5 +37,14 @@
         "nodemon": "^2.0.7",
         "ts-node": "^10.4.0",
         "typescript": "^4.4.4"
+    },
+    "release": {
+        "branches": [
+            "main"
+        ],
+        "plugins": [
+            "@semantic-release/commit-analyzer",
+            "@semantic-release/release-notes-generator"
+        ]   
     }
 }
