@@ -18,7 +18,7 @@
     "engines": {
         "node": "16 || 18"
     },
-    "main": "./lib/index.js",
+    "main": "./lib/src/index.js",
     "scripts": {
         "dev": "nodemon -e ts --exec node --inspect=9239 --signal SIGINT -r ts-node/register ./src/index.ts",
         "build": "tsc --build",
@@ -45,9 +45,12 @@
         "plugins": [
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",
-            ["@semantic-release/npm", {
-                "npmPublish": false
-            }]
+            [
+                "@semantic-release/npm",
+                {
+                    "npmPublish": false
+                }
+            ]
         ]
     }
 }
