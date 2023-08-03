@@ -1,0 +1,20 @@
+{
+    "NodePort":3000,
+    "SonatypeIQURL": "https://iq.aplattel.ngrok.io/",
+    
+    "URLRouting":[
+        {
+            "handler":"slack",
+            "applications":["IQ-App-ID", "app", "..."],
+            "channelURL":"https://hooks.slack.com/services/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"
+        },{
+            "handler":"slack",
+            "applications":"DEFAULT",
+            "channelURL":"https://hooks.slack.com/services/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"
+        },{   
+            "handler":"teams",
+            "applications":"DEFAULT",
+            "channelURL":"https://sonatype.webhook.office.com/webhookb2/a7c25190-7c4b-47d8-9c19-8d1154dff69f@bd28fc0b-f086-430f-ac20-16268536c81f/IncomingWebhook/abd6e82240fa4c5e85386cd51e8a5115/c73ccef1-21a5-495b-a911-1aea8fbaf55a"
+        }
+    ]
+}
