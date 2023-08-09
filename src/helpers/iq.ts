@@ -1,4 +1,3 @@
-"use strict";
 /*
  * Copyright (c) 2019-present Sonatype, Inc.
  *
@@ -14,5 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-//# sourceMappingURL=types.js.map
+
+import { IqWebhookPayload } from "../types";
+import { IQ_SERVER_URL } from '..';
+
+export function getIqUrlForApplicationEvaluation(payload: IqWebhookPayload): string {
+    return `${IQ_SERVER_URL}/assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
+}

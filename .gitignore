@@ -5,6 +5,8 @@
 /.pnp
 .pnp.js
 dev.config.json
+.env
+lib/*
 
 # testing
 /coverage

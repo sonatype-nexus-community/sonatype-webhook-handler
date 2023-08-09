@@ -15,10 +15,13 @@
  */
 
 import express, { Express, Request, Response } from 'express';
-import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
-import { WebhookTarget } from "./WebHookTarget";
-import template from "./templates/adaptive-card-default.json";
 import { IqWebhookPayload } from "./types";
+import { IqWebhookEvent } from './constants';
+import { Configuration, HandlerRule, UrlOnlyConfiguration } from './config';
+import { BaseHandler, HandlerType } from './handlers/base';
+import { SlackHandler } from './handlers/slack';
+import { TeamsHandler } from './handlers/teams';
+import { WebhookTarget } from './WebHookTarget';
 
 require('dotenv').config()
 const app: Express = express()
@@ -27,29 +30,59 @@ app.use(express.json());
 /**
  * Fill in your incoming webhook url.
  */
-const IQ_SERVER_URL: string = process.env.IQ_SERVER_URL
+export const IQ_SERVER_URL: string = process.env.IQ_SERVER_URL
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
-const TEAMS_WEBHOOK_URL: string = process.env.TEAMS_WEBHOOK_URL
-const webhookTarget = new WebhookTarget(new URL(TEAMS_WEBHOOK_URL));
 
-const IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION = 'iq:applicationEvaluation'
+let CONFIG_DATA: Configuration = { "rules": [] }
+try {
+    CONFIG_DATA = require(process.env.CONFIG_FILE_PATH)
+} catch (err) {
+    console.error(`Failed to load config - are you sure it's valid? ${err}`)
+    process.exit(1)
+}
 
-app.post('/teams', function (req: Request, res: Response) {
+const handlers = {
+    [HandlerType.SLACK]: new SlackHandler(),
+    [HandlerType.TEAMS]: new TeamsHandler()
+}
+
+app.post('/webhook', function (req: Request, res: Response) {
     const webhookId = req.get('X-Nexus-Webhook-Id')
     const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
-    
+    const eventType = Object.keys(IqWebhookEvent)[Object.values(IqWebhookEvent).indexOf(webhookId as unknown as IqWebhookEvent)] as IqWebhookEvent
+    handleWebhookRequest(eventType, webhookDelivery, req.body, res)
+   
     // Response Immediately!
     res.send({status: 200})
-    if (webhookId !== undefined && webhookId == IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION && webhookDelivery) {
-        console.log(`${IQ_WEBHOOK_EVENT_APPLICATION_EVALUATION} WebHook Delivery ${webhookDelivery} received and being processed`)
-        sendAdaptiveCardForApplicationEvaluation(req.body)
-    }
 })
 
+function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
+    console.debug(`Processing WebHook Event ID ${eventId}...`)
+    for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
+        const rule: HandlerRule = CONFIG_DATA.rules[i]
+        console.log(`   Rule: ${rule.events} vs ${eventType}`)
+        for (var j in rule.events) {
+            if (IqWebhookEvent[rule.events[j]] == eventType) {
+                const handler = handlers[HandlerType[rule.handler]] as BaseHandler
+                console.log(`Dealing with ${eventType} for ${rule.handler}`)
+
+                switch (eventType) {
+                    case IqWebhookEvent.APPLICATION_EVALUATION:
+                        handler.handleApplicationEvaluation(
+                            payload,
+                            new WebhookTarget(new URL((rule.handlerConfig as UrlOnlyConfiguration).url))
+                        )
+                        break
+                }
+            }
+        }
+    }
+
+    res.send({status: 200})
+}
 
 app.get('/test', function (req: Request, res: Response) {
     console.log('Received request for test message')
-    res.send({status: 200, message: "Success!"})
     let payload: IqWebhookPayload = {
         "timestamp": "2020-04-22T18:30:04.673+0000",
         "initiator": "admin",
@@ -73,33 +106,11 @@ app.get('/test', function (req: Request, res: Response) {
             "reportId": "36f37cf776dd408bacd063450ab04f71"
         }
     }
-    sendAdaptiveCardForApplicationEvaluation(payload)
+    handleWebhookRequest(IqWebhookEvent.APPLICATION_EVALUATION, 'TEST-EVENT', payload, res)
 });
 
-/**
-* Send adaptive cards.
-*/
-function sendAdaptiveCardForApplicationEvaluation(payload: IqWebhookPayload): void {
-    webhookTarget.sendAdaptiveCard(
-        AdaptiveCards.declare(template).render(
-        {
-            "title": `Sonatype Scan Result for ${payload.applicationEvaluation.application.name}`,
-            "stage": payload.applicationEvaluation.stage,
-            "application": payload.applicationEvaluation.application.name,
-            "critical": payload.applicationEvaluation.criticalComponentCount,
-            "severe": payload.applicationEvaluation.severeComponentCount,
-            "reportUrl" : getIqUrlForApplicationEvaluation(payload)
-        }))
-    .then(() => console.log("Send adaptive card successfully."))
-    .catch(e => console.log(`Failed to send adaptive card. ${e}`));
-}
-
-
-function getIqUrlForApplicationEvaluation(payload: IqWebhookPayload): string {
-    return `${IQ_SERVER_URL}/assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`
-}
 
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}/`)
 console.log(`   IQ SERVER at: ${IQ_SERVER_URL}`)
-console.log(`   MS TEAMS at: ${TEAMS_WEBHOOK_URL.substring(0, 128)}...`)
+console.log(`Loaded ${CONFIG_DATA.rules.length} Routing Rules from ${process.env.CONFIG_FILE_PATH}`)

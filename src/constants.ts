@@ -14,18 +14,11 @@
  * limitations under the License.
  */
 
-
-const axios = require('axios');
-
-function sendWebHookMessage(e){
-    axios(e).then(function (response) {
-        console.log("WebHook Response: " + JSON.stringify(response.data));
-    }).catch(function (error) {
-        console.log(error);
-        console.log(e);
-    });
+export enum IqWebhookEvent {
+    APPLICATION_EVALUATION = 'iq:applicationEvaluation'
 }
 
-module.exports = {
-    sendWebHookMessage:sendWebHookMessage
+export function getEnumKeyByEnumValue(myEnum, enumValue) {
+    let keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
+    return keys.length > 0 ? keys[0] : null;
 }
