@@ -14,30 +14,16 @@
  * limitations under the License.
  */
 
-interface IqApplication {
-    id: string
-    publicId: string
-    name: string
-    organizationId: string
+import { WebhookTarget } from "../WebHookTarget";
+import { IqWebhookPayload } from "../types";
+
+export enum HandlerType {
+    SLACK,
+    TEAMS,
+    JIRA
 }
 
-interface IqApplicationEvaluation {
-    application: IqApplication
-    policyEvaluationId: string
-    stage: string
-    ownerId: string
-    evaluationDate: string
-    affectedComponentCount: number
-    criticalComponentCount: number
-    severeComponentCount: number
-    moderateComponentCount: number
-    outcome: string
-    reportId: string
-}
+export abstract class BaseHandler {
 
-export interface IqWebhookPayload {
-    timestamp: string
-    initiator: string
-    id: string
-    applicationEvaluation: IqApplicationEvaluation
+    public abstract handleApplicationEvaluation(payload: IqWebhookPayload, target: WebhookTarget): void
 }
