@@ -7,6 +7,7 @@
 dev.config.json
 .env
 lib/*
+config-*.json
 
 # testing
 /coverage

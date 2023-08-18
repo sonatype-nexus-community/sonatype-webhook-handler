@@ -16,15 +16,18 @@
 
 import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 import { WebhookTarget } from "../WebHookTarget";
-import { IqWebhookPayload } from "../types";
+import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types";
 import { BaseHandler } from "./base";
 
 import template from "../templates/adaptive-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 
 export class TeamsHandler extends BaseHandler {
+    public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
+        throw new Error("Method not implemented.")
+    }
     
-    public handleApplicationEvaluation(payload: IqWebhookPayload, target: WebhookTarget): void {
+    public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         target.sendAdaptiveCard(
             AdaptiveCards.declare(template).render(
             {

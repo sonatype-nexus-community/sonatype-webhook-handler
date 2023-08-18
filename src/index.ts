@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import express, { Express, Request, Response } from 'express';
-import { IqWebhookPayload } from "./types";
-import { IqWebhookEvent } from './constants';
-import { Configuration, HandlerRule, UrlOnlyConfiguration } from './config';
-import { BaseHandler, HandlerType } from './handlers/base';
-import { SlackHandler } from './handlers/slack';
-import { TeamsHandler } from './handlers/teams';
-import { WebhookTarget } from './WebHookTarget';
+import express, { Express, Request, Response } from 'express'
+import { IqWebhookPayload, IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "./types"
+import { IqWebhookEvent } from './constants'
+import { Configuration, HandlerRule, UrlOnlyConfiguration } from './config'
+import { BaseHandler, HandlerType } from './handlers/base'
+import { JiraHandler } from './handlers/jira'
+import { SlackHandler } from './handlers/slack'
+import { TeamsHandler } from './handlers/teams'
+import { WebhookTarget } from './WebHookTarget'
 
 require('dotenv').config()
 const app: Express = express()
@@ -42,6 +43,7 @@ try {
 }
 
 const handlers = {
+    [HandlerType.JIRA]: new JiraHandler(),
     [HandlerType.SLACK]: new SlackHandler(),
     [HandlerType.TEAMS]: new TeamsHandler()
 }
@@ -69,7 +71,7 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
                 switch (eventType) {
                     case IqWebhookEvent.APPLICATION_EVALUATION:
                         handler.handleApplicationEvaluation(
-                            payload,
+                            payload as IqWebhookPayloadApplicationEvaluation,
                             new WebhookTarget(new URL((rule.handlerConfig as UrlOnlyConfiguration).url))
                         )
                         break
@@ -81,9 +83,9 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
     res.send({status: 200})
 }
 
-app.get('/test', function (req: Request, res: Response) {
-    console.log('Received request for test message')
-    let payload: IqWebhookPayload = {
+app.get('/test/application-evaluation', function (_req: Request, res: Response) {
+    console.log('Received request for test Application Evaluation message')
+    let payload: IqWebhookPayloadApplicationEvaluation = {
         "timestamp": "2020-04-22T18:30:04.673+0000",
         "initiator": "admin",
         "id": "d5cc2e91d6454545841da5599d3c7156",
@@ -109,6 +111,18 @@ app.get('/test', function (req: Request, res: Response) {
     handleWebhookRequest(IqWebhookEvent.APPLICATION_EVALUATION, 'TEST-EVENT', payload, res)
 });
 
+app.get('/test/waiver-request', function (_req: Request, res: Response) {
+    console.log('Received request for test Waiver Request message')
+    let payload: IqWebhookPayloadWaiverRequest = {
+        timestamp: '2023-08-16T17:32:06.147+00:00',
+        initiator: 'admin',
+        comment: '',
+        policyViolationId: '69e917987e1b4b3b8ea8c2930e0bdce3',
+        policyViolationLink: 'http://localhost:8070/assets/#/violation/69e917987e1b4b3b8ea8c2930e0bdce3',
+        addWaiverLink: 'http://localhost:8070/assets/#/addWaiver/69e917987e1b4b3b8ea8c2930e0bdce3'
+    }
+    handleWebhookRequest(IqWebhookEvent.WAIVER_REQUEST, 'TEST-EVENT', payload, res)
+});
 
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}/`)

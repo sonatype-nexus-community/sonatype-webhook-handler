@@ -1,6 +1,6 @@
 {
     "name": "sonatype-webhook-handler",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Have notifications in Microsoft Teams & Slack powered by Sonatype Lifecycle",
     "homepage": "https://github.com/sonatype-nexus-community/sonatype-webhook-handler",
     "bugs": {

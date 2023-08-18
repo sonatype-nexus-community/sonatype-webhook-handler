@@ -15,7 +15,10 @@
  */
 
 import { WebhookTarget } from "../WebHookTarget";
-import { IqWebhookPayload } from "../types";
+import { 
+    IqWebhookPayloadApplicationEvaluation,
+    IqWebhookPayloadWaiverRequest
+} from "../types";
 
 export enum HandlerType {
     SLACK,
@@ -25,6 +28,7 @@ export enum HandlerType {
 
 export abstract class BaseHandler {
 
-    public abstract handleApplicationEvaluation(payload: IqWebhookPayload, target: WebhookTarget): void
-    // public abstract handleWaiverRequest(payload: IqWebhookPayload, target: WebhookTarget): void
+    public abstract handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void
+    
+    public abstract handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void
 }
