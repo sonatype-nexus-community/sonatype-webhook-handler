@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+
 interface IqApplication {
     id: string
     publicId: string
@@ -35,10 +36,21 @@ interface IqApplicationEvaluation {
     reportId: string
 }
 
-export interface IqWebhookPayload {
+export interface IqWebhookPayloadBase {
     timestamp: string
     initiator: string
+}
+
+export type IqWebhookPayloadApplicationEvaluation = IqWebhookPayloadBase & {
     id: string
     applicationEvaluation: IqApplicationEvaluation
-
 }
+        
+export type IqWebhookPayloadWaiverRequest = IqWebhookPayloadBase & {
+    comment: string
+    policyViolationId: string
+    policyViolationLink: string
+    addWaiverLink: string
+}
+
+export type IqWebhookPayload = IqWebhookPayloadApplicationEvaluation | IqWebhookPayloadWaiverRequest

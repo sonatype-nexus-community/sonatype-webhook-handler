@@ -1,10 +1,10 @@
 {
-    "name": "sonatype-teams-app-integration",
-    "version": "0.1.0",
-    "description": "Have notifications in Microsoft Teams powered by Sonatype Lifecycle",
-    "homepage": "https://github.com/sonatype-nexus-community/sonatype-teams-app-integration",
+    "name": "sonatype-webhook-handler",
+    "version": "1.0.0",
+    "description": "Have notifications in Microsoft Teams & Slack powered by Sonatype Lifecycle",
+    "homepage": "https://github.com/sonatype-nexus-community/sonatype-webhook-handler",
     "bugs": {
-        "url": "https://github.com/sonatype-nexus-community/sonatype-teams-app-integration/issues"
+        "url": "https://github.com/sonatype-nexus-community/sonatype-webhook-handler/issues"
     },
     "license": "Apache-2.0",
     "author": {
@@ -13,7 +13,7 @@
         "url": "https://github.com/sonatype-nexus-community"
     },
     "repository": {
-        "url": "https://github.com/sonatype-nexus-community/sonatype-teams-app-integration"
+        "url": "https://github.com/sonatype-nexus-community/sonatype-webhook-handler"
     },
     "engines": {
         "node": "16 || 18"
@@ -23,7 +23,7 @@
         "dev": "nodemon -e ts --exec node --inspect=9239 --signal SIGINT -r ts-node/register ./src/index.ts",
         "build": "tsc --build",
         "start": "node ./lib/src/index.js",
-        "watch": "nodemon --watch ./src -e ts --exec \"npm run start\""
+        "watch": "nodemon --watch ./src -e ts --exec \"npm run build && npm run start\""
     },
     "dependencies": {
         "@microsoft/adaptivecards-tools": "^1.3.0",
@@ -45,9 +45,12 @@
         "plugins": [
             "@semantic-release/commit-analyzer",
             "@semantic-release/release-notes-generator",
-            ["@semantic-release/npm", {
-                "npmPublish": false
-            }]
+            [
+                "@semantic-release/npm",
+                {
+                    "npmPublish": false
+                }
+            ]
         ]
     }
 }

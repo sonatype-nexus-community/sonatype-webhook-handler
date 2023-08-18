@@ -16,7 +16,7 @@
 
 FROM node:18-slim
 
-LABEL name="Microsoft Teams Webhook Handle for Sonatype Lifecycle" \
+LABEL name="Sonatype Webhook Handler for Sonatype Lifecycle" \
     maintainer="Sonatype Community <community-group@sonatype.com>" \
     vendor="Sonatype Community <community-group@sonatype.com>"
 

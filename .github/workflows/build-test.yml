@@ -58,7 +58,7 @@ jobs:
             - run: npx semantic-release
 
             - name: Determine Version
-              run: echo "NEW_VERSION=$(npm version | grep 'sonatype-teams-app-integration' | cut -d "'" -f4)" >> $GITHUB_ENV
+              run: echo "NEW_VERSION=$(npm version | grep 'sonatype-webhook-handler' | cut -d "'" -f4)" >> $GITHUB_ENV
 
             - name: Build and push
               uses: docker/build-push-action@v4
@@ -67,4 +67,4 @@ jobs:
                   file: ./Dockerfile
                   platforms: linux/arm64,linux/amd64
                   push: true
-                  tags: sonatypecommunity/sonatype-teams-webhook-handler:latest , sonatypecommunity/sonatype-teams-webhook-handler:${{ env.NEW_VERSION }}
+                  tags: sonatypecommunity/sonatype-webhook-handler:latest , sonatypecommunity/sonatype-webhook-handler:${{ env.NEW_VERSION }}
