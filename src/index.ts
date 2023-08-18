@@ -23,6 +23,7 @@ import { JiraHandler } from './handlers/jira'
 import { SlackHandler } from './handlers/slack'
 import { TeamsHandler } from './handlers/teams'
 import { JiraWebhookTarget, WebhookTarget } from './WebHookTarget'
+import { HandlerNotImplementedError } from './error'
 
 require('dotenv').config()
 const app: Express = express()
@@ -83,14 +84,21 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
             if (IqWebhookEvent[rule.events[j]] == eventType) {
                 const handler = handlers[HandlerType[rule.handler]] as BaseHandler
                 console.log(`Dealing with ${eventType} for ${rule.handler}`)
-
-                switch (eventType) {
-                    case IqWebhookEvent.APPLICATION_EVALUATION:
-                        handler.handleApplicationEvaluation(payload as IqWebhookPayloadApplicationEvaluation, webhookTarget)
-                        break
-                    case IqWebhookEvent.WAIVER_REQUEST:
-                        handler.handleWaiverRequest(payload as IqWebhookPayloadWaiverRequest, webhookTarget)
-                        break
+                try {
+                    switch (eventType) {
+                        case IqWebhookEvent.APPLICATION_EVALUATION:
+                            handler.handleApplicationEvaluation(payload as IqWebhookPayloadApplicationEvaluation, webhookTarget)
+                            break
+                        case IqWebhookEvent.WAIVER_REQUEST:
+                            handler.handleWaiverRequest(payload as IqWebhookPayloadWaiverRequest, webhookTarget)
+                            break
+                    }
+                } catch (e) { 
+                    if (e instanceof HandlerNotImplementedError) {
+                        console.debug(`Handler for ${rule.handler} does not yet support the Webhook Event ${eventType}`)
+                    } else {
+                        throw e
+                    }
                 }
             }
         }
@@ -99,7 +107,7 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
     res.send({status: 200})
 }
 
-app.get('/test/application-evaluation', function (_req: Request, res: Response) {
+app.get('/test/applicaiton-evaluation', function (_req: Request, res: Response) {
     console.log('Received request for test Application Evaluation message')
     let payload: IqWebhookPayloadApplicationEvaluation = {
         "timestamp": "2020-04-22T18:30:04.673+0000",

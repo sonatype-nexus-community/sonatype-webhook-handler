@@ -15,6 +15,7 @@
  */
 
 import { JiraWebhookTarget, WebhookTarget } from "../WebHookTarget"
+import { HandlerNotImplementedError } from "../error"
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types"
 import { BaseHandler } from "./base"
 
@@ -22,7 +23,7 @@ import { BaseHandler } from "./base"
 export class JiraHandler extends BaseHandler {
 
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
-        throw new Error("Method not implemented.")
+        throw new HandlerNotImplementedError("Method not implemented.")
     }
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: JiraWebhookTarget): void {

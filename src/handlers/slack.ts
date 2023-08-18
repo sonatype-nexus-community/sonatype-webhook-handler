@@ -15,6 +15,7 @@
  */
 
 import { WebhookTarget } from "../WebHookTarget";
+import { HandlerNotImplementedError } from "../error"
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types";
 import { BaseHandler } from "./base";
@@ -22,7 +23,7 @@ import { BaseHandler } from "./base";
 export class SlackHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new Error("Method not implemented.")
+        throw new HandlerNotImplementedError("Method not implemented.")
     }
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {

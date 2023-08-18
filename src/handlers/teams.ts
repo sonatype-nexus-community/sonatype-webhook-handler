@@ -21,10 +21,12 @@ import { BaseHandler } from "./base";
 
 import template from "../templates/adaptive-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
+import { HandlerNotImplementedError } from "../error"
 
 export class TeamsHandler extends BaseHandler {
+    
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new Error("Method not implemented.")
+        throw new HandlerNotImplementedError("Method not implemented.")
     }
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
