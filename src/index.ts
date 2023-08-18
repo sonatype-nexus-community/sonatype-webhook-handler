@@ -17,12 +17,12 @@
 import express, { Express, Request, Response } from 'express'
 import { IqWebhookPayload, IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "./types"
 import { IqWebhookEvent } from './constants'
-import { Configuration, HandlerRule, UrlOnlyConfiguration } from './config'
+import { Configuration, HandlerRule, JiraConfiguration, UrlOnlyConfiguration } from './config'
 import { BaseHandler, HandlerType } from './handlers/base'
 import { JiraHandler } from './handlers/jira'
 import { SlackHandler } from './handlers/slack'
 import { TeamsHandler } from './handlers/teams'
-import { WebhookTarget } from './WebHookTarget'
+import { JiraWebhookTarget, WebhookTarget } from './WebHookTarget'
 
 require('dotenv').config()
 const app: Express = express()
@@ -62,6 +62,22 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
     console.debug(`Processing WebHook Event ID ${eventId}...`)
     for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
         const rule: HandlerRule = CONFIG_DATA.rules[i]
+        let webhookTarget: WebhookTarget
+        switch (Number(HandlerType[rule.handler])) {
+            case HandlerType.JIRA:
+                webhookTarget = new JiraWebhookTarget(
+                    new URL((rule.handlerConfig as UrlOnlyConfiguration).url),
+                    (rule.handlerConfig as JiraConfiguration).projectKey,
+                    (rule.handlerConfig as JiraConfiguration).issueType,
+                    (rule.handlerConfig.authorization !== undefined ? rule.handlerConfig.authorization : undefined)
+                )
+                break
+            default:
+                webhookTarget = new WebhookTarget(
+                    new URL((rule.handlerConfig as UrlOnlyConfiguration).url),
+                    (rule.handlerConfig.authorization !== undefined ? rule.handlerConfig.authorization : undefined)
+                )
+        }
         console.log(`   Rule: ${rule.events} vs ${eventType}`)
         for (var j in rule.events) {
             if (IqWebhookEvent[rule.events[j]] == eventType) {
@@ -70,10 +86,10 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
 
                 switch (eventType) {
                     case IqWebhookEvent.APPLICATION_EVALUATION:
-                        handler.handleApplicationEvaluation(
-                            payload as IqWebhookPayloadApplicationEvaluation,
-                            new WebhookTarget(new URL((rule.handlerConfig as UrlOnlyConfiguration).url))
-                        )
+                        handler.handleApplicationEvaluation(payload as IqWebhookPayloadApplicationEvaluation, webhookTarget)
+                        break
+                    case IqWebhookEvent.WAIVER_REQUEST:
+                        handler.handleWaiverRequest(payload as IqWebhookPayloadWaiverRequest, webhookTarget)
                         break
                 }
             }

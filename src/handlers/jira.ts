@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { WebhookTarget } from "../WebHookTarget"
-import { getIqUrlForApplicationEvaluation } from "../helpers/iq"
+import { JiraWebhookTarget, WebhookTarget } from "../WebHookTarget"
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types"
 import { BaseHandler } from "./base"
 
@@ -26,27 +25,18 @@ export class JiraHandler extends BaseHandler {
         throw new Error("Method not implemented.")
     }
     
-    public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        // var old = payload
-        // var examplePayload = {
-        //     timestamp: '2023-08-16T17:32:06.147+00:00',
-        //     initiator: 'admin',
-        //     comment: '',
-        //     policyViolationId: '69e917987e1b4b3b8ea8c2930e0bdce3',
-        //     policyViolationLink: 'http://localhost:8070/assets/#/violation/69e917987e1b4b3b8ea8c2930e0bdce3',
-        //     addWaiverLink: 'http://localhost:8070/assets/#/addWaiver/69e917987e1b4b3b8ea8c2930e0bdce3'
-        // }
-
+    public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: JiraWebhookTarget): void {
+        console.log(`Handling Waiver Request to JIRA with PK=${target.projectKey} and IT=${target.issueType}`)
         //Create Issue with API Docs: https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/
         //Jira Markdown Docs: https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote/
         const message = {
             "fields": {
-                "summary": "New Sonatype Policy Waiver Request",
+                "summary": "New Sonatype Platform Policy Waiver Request",
                 "issuetype": {
-                    "name": "Task" //ISSUE TYPE
+                    "name": target.issueType
                 },
                 "project": {
-                    "key": "WH" //KEY
+                    "key": target.projectKey
                 },
                 "description": {
                     "type": "doc",
@@ -66,7 +56,7 @@ export class JiraHandler extends BaseHandler {
                                 },
                                 {
                                     "type": "text",
-                                    "text": " has requested a policy violation waiver in Sonatype IQ Server. \nRead more about this issue here: "
+                                    "text": " has requested a policy violation waiver in your Sonatype Platform.\nRead more about this issue here: "
                                 },
                                 {
                                     "type": "text",
@@ -111,14 +101,15 @@ export class JiraHandler extends BaseHandler {
                                         }
                                     ]
                                 }
-        
-        
                             ]
                         }
                     ]
                 }
             }
         }
-        target.sendMessage(message).catch(err => console.error(`JIRA Error ${err}: ${err.response.data}`))
+        target.sendMessage(message).catch((err) => {
+            console.error(`JIRA Error ${err.response.status}: ${JSON.stringify(err.response.data)}`)
+            console.error(err.message)
+        })
     }
 }

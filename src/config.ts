@@ -30,8 +30,11 @@ export interface HandlerRule {
 
 export interface UrlOnlyConfiguration {
     url: string
+    authorization?: string
 }
 
-export interface JiraConfiguration {
+export type JiraConfiguration = UrlOnlyConfiguration & {
+    authorization: string
+    issueType: string
     projectKey: string
 }

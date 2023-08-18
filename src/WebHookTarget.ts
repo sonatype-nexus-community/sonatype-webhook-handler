@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-import axios from "axios";
+import axios, { AxiosResponse } from "axios"
+
+interface Headers {
+    [key: string]: string
+}
+
 
 export class WebhookTarget {
-    /**
-     * The bound incoming webhook URL.
-     */
-    public readonly webhook: URL;
   
     /**
      * Constructor.
      * 
      * @param webhook - the incoming webhook URL.
      */
-    constructor(webhook: URL) {
-      this.webhook = webhook;
+    constructor(protected readonly webhook: URL, protected readonly basicAuthentication?: string) {
+        this.webhook = webhook
     }
   
     /**
@@ -37,13 +38,14 @@ export class WebhookTarget {
      * @param text - the plain text message.
      * @returns A `Promise` representing the asynchronous operation.
      */
-    public sendMessage(data): Promise<void> {
-      return axios.post(
-        this.webhook.toString(), data,
-        {
-          headers: { "content-type": "application/json" },
-        }
-      )
+    public sendMessage(data: any): Promise<AxiosResponse> {
+        return axios.post(
+            this.webhook.toString(),
+            data,
+            {
+                headers: this.getHeaders(),
+            }
+        )
     }
   
     /**
@@ -52,22 +54,41 @@ export class WebhookTarget {
      * @param card - the adaptive card raw JSON.
      * @returns A `Promise` representing the asynchronous operation.
      */
-    public sendAdaptiveCard(card: unknown): Promise<void> {
-      return axios.post(
-        this.webhook.toString(),
-        {
-          type: "message",
-          attachments: [
+    public sendAdaptiveCard(card: any): Promise<void> {
+        return axios.post(
+            this.webhook.toString(),
             {
-              contentType: "application/vnd.microsoft.card.adaptive",
-              contentUrl: null,
-              content: card,
+                type: "message",
+                attachments: [{
+                    contentType: "application/vnd.microsoft.card.adaptive",
+                    contentUrl: null,
+                    content: card,
+                }],
             },
-          ],
-        },
-        {
-          headers: { "content-type": "application/json" },
+            {
+                headers: this.getHeaders(),
+            }
+        )
+    }
+  
+    private getHeaders(): Headers {
+        const headers = { "content-type": "application/json" }
+        if (this.basicAuthentication !== undefined) {
+            headers['authorization'] = `Basic ${this.basicAuthentication as string}`
         }
-      );
+        return headers
+    }
+}
+
+
+export class JiraWebhookTarget extends WebhookTarget {
+
+    /**
+     * Constructor.
+     * 
+     * @param webhook - the incoming webhook URL.
+     */
+    constructor(protected readonly webhook: URL, public readonly projectKey: string, public readonly issueType: string, protected readonly basicAuthentication?: string) {
+        super(webhook, basicAuthentication)
     }
 }
