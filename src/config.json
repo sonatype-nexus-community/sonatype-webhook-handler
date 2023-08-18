@@ -1,0 +1,43 @@
+{
+    "rules": [
+        {
+            "events": [
+                "APPLICATION_EVALUATION"
+            ],
+            "handler": "SLACK",
+            "handlerConfig": {
+                "url": "https://hooks.slack.com/services/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"
+            },
+            "applications": "DEFAULT"
+        },
+        {
+            "events": [
+                "APPLICATION_EVALUATION"
+            ],
+            "handler": "TEAMS",
+            "handlerConfig": {
+                "url": "https://sonatype.webhook.office.com/webhookb2/a7c25190-7c4b-47d8-9c19-8d1154dff69f@bd28fc0b-f086-430f-ac20-16268536c81f/IncomingWebhook/abd6e82240fa4c5e85386cd51e8a5115/c73ccef1-21a5-495b-a911-1aea8fbaf55a"
+            },
+            "applications": "DEFAULT"
+        },
+        {
+            "events": [
+                "WAIVER_REQUEST"
+            ],
+            "handler": "JIRA",
+            "handlerConfig": {
+                "url": "https://aplattel-jira.atlassian.net/rest/api/3/issue",
+                "headers": { 
+                    "Content-Type": "application/json", 
+                    "Accept": "application/json", 
+                    "Authorization": "Basic YXBsYXR0ZWxAc29uYXR5cGUuY29tOkFUQVRUM3hGZkdGMEVIS2h5YTVyU3dQZHhmS2xvZ3FYSEh2T3h6UG1hOHFRNWg5V204Z2RieFp6N3BMWUc5R0E1ZzR1Y0VMeGZyRXBEVmUxX0FMUDZiQ1NGbEtDM1JFWU9YeFptN1FMYWRJOUo4V1NUZ0xvcWJvdjlHVWY2Vkg5eHpNSnowd2ZKM0lrQ0VrcUY0Vkx0REI4VVNRX0RHdkdOczZUa0xidC1DUnNaNU5MYm9tVHRwaz0zMkFFRjM0MQ==" 
+                },
+                "jira": {
+                    "issueType":"Task",
+                    "projectKey":"WH"
+                }
+            },
+            "applications": "DEFAULT"
+        }
+    ]
+}

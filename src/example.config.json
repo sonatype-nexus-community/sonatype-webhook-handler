@@ -1,0 +1,43 @@
+{
+    "rules": [
+        {
+            "events": [
+                "APPLICATION_EVALUATION"
+            ],
+            "handler": "SLACK",
+            "handlerConfig": {
+                "url": "https://hooks.slack.com/services/..."
+            },
+            "applications": "DEFAULT"
+        },
+        {
+            "events": [
+                "APPLICATION_EVALUATION"
+            ],
+            "handler": "TEAMS",
+            "handlerConfig": {
+                "url": "https://sonatype.webhook.office.com/webhookb2/..."
+            },
+            "applications": "DEFAULT"
+        },
+        {
+            "events": [
+                "WAIVER_REQUEST"
+            ],
+            "handler": "JIRA",
+            "handlerConfig": {
+                "url": "https://name-jira.atlassian.net/rest/api/3/issue",
+                "headers": { 
+                    "Content-Type": "application/json", 
+                    "Accept": "application/json", 
+                    "Authorization": "Basic ..." 
+                },
+                "jira": {
+                    "issueType":"Task",
+                    "projectKey":"PK"
+                }
+            },
+            "applications": "DEFAULT"
+        }
+    ]
+}

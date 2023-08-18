@@ -26,4 +26,5 @@ export enum HandlerType {
 export abstract class BaseHandler {
 
     public abstract handleApplicationEvaluation(payload: IqWebhookPayload, target: WebhookTarget): void
+    // public abstract handleWaiverRequest(payload: IqWebhookPayload, target: WebhookTarget): void
 }
