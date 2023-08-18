@@ -22,8 +22,7 @@
             {
                 "assets": [
                     "CHANGELOG.md",
-                    "package.json",
-                    "public/manifest.json"
+                    "package.json"
                 ]
             }
         ]
