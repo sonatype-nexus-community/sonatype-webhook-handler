@@ -23,12 +23,48 @@ import { BaseHandler } from "./base";
 export class SlackHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new HandlerNotImplementedError("Method not implemented.")
+        const message = {
+            "text": "New Sonatype Platform Policy Waiver Request",
+            "blocks": [
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": `New Sonatype Platform Policy Waiver Request`
+                    }
+                }, {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": `*${payload.initiator}* has requested a policy violation waiver on the Sonatype Platform.\nRead more about this issue here: <${payload.policyViolationLink}|Violation Details> \nRequest note:\n\t_\"${payload.comment}\"_`
+                        },
+                    ]
+                }, {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "IQ Waiver Approval Page"
+                            },
+                            "style": "primary",
+                            "url": payload.addWaiverLink
+                        }
+                    ]
+                }
+                
+            ]
+        }
+
+        target.sendMessage(message).catch(err => console.error(`Slack Error ${err}: ${err.response.data}`))
     }
+    
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         const message = {
-            "text": "TESTING",
+            "text": "Sonatype IQ Evaluation",
             "blocks": [
                 {
                     "type": "header",

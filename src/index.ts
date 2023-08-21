@@ -140,7 +140,7 @@ app.get('/test/waiver-request', function (_req: Request, res: Response) {
     let payload: IqWebhookPayloadWaiverRequest = {
         timestamp: '2023-08-16T17:32:06.147+00:00',
         initiator: 'admin',
-        comment: '',
+        comment: 'waiver request comment',
         policyViolationId: '69e917987e1b4b3b8ea8c2930e0bdce3',
         policyViolationLink: 'http://localhost:8070/assets/#/violation/69e917987e1b4b3b8ea8c2930e0bdce3',
         addWaiverLink: 'http://localhost:8070/assets/#/addWaiver/69e917987e1b4b3b8ea8c2930e0bdce3'
