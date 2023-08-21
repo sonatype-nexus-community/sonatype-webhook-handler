@@ -52,15 +52,12 @@ const handlers = {
 app.post('/webhook', function (req: Request, res: Response) {
     const webhookId = req.get('X-Nexus-Webhook-Id')
     const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
-    const eventType = Object.keys(IqWebhookEvent)[Object.values(IqWebhookEvent).indexOf(webhookId as unknown as IqWebhookEvent)] as IqWebhookEvent
-    handleWebhookRequest(eventType, webhookDelivery, req.body, res)
+    handleWebhookRequest(webhookId as IqWebhookEvent, webhookDelivery, req.body, res)
    
-    // Response Immediately!
-    res.send({status: 200})
 })
 
 function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
-    console.debug(`Processing WebHook Event ID ${eventId}...`)
+    console.debug(`\nProcessing WebHook Event ID ${eventId}...`)
     for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
         const rule: HandlerRule = CONFIG_DATA.rules[i]
         let webhookTarget: WebhookTarget
@@ -101,6 +98,7 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
                     }
                 }
             }
+            
         }
     }
 
@@ -145,6 +143,7 @@ app.get('/test/waiver-request', function (_req: Request, res: Response) {
         policyViolationLink: 'http://localhost:8070/assets/#/violation/69e917987e1b4b3b8ea8c2930e0bdce3',
         addWaiverLink: 'http://localhost:8070/assets/#/addWaiver/69e917987e1b4b3b8ea8c2930e0bdce3'
     }
+
     handleWebhookRequest(IqWebhookEvent.WAIVER_REQUEST, 'TEST-EVENT', payload, res)
 });
 
