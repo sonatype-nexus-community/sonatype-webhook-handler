@@ -26,7 +26,36 @@ import { HandlerNotImplementedError } from "../error"
 export class TeamsHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new HandlerNotImplementedError("Method not implemented.")
+        const color = "ff8400" // Orange
+        const message = {
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": color,
+            "summary": "New Sonatype Platform Policy Waiver Request",
+            "sections": [{
+                "activityTitle": "New Sonatype Platform Policy Waiver Request",
+                "activitySubtitle": `Requested By: ${payload.initiator}`,
+                // "activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png",
+                "facts": [ {
+                    "name": "Read More Here: ",
+                    "value": `[Violation Details](${payload.policyViolationLink})`
+                },{
+                    "name": "Request Note: ",
+                    "value": `\"${payload.comment}\"`
+                }],
+                "markdown": true
+            }],
+            "potentialAction": [ {
+                "@type": "OpenUri",
+                "name": "Create Waiver in IQ",
+                "targets": [{
+                    "os": "default",
+                    "uri": payload.addWaiverLink
+                }]
+            }]
+        }
+
+        target.sendMessage(message).catch(err => console.error(`Microsoft Teams Error ${err}: ${err.response.data}`))
     }
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
@@ -39,7 +68,7 @@ export class TeamsHandler extends BaseHandler {
                 "critical": payload.applicationEvaluation.criticalComponentCount,
                 "severe": payload.applicationEvaluation.severeComponentCount,
                 "reportUrl" : getIqUrlForApplicationEvaluation(payload)
-                })
+            })
         ).then(() => console.log("Send adaptive card successfully.")).catch(e => console.log(`Failed to send adaptive card. ${e}`))
     }
 }

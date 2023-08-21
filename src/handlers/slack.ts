@@ -47,7 +47,7 @@ export class SlackHandler extends BaseHandler {
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "IQ Waiver Approval Page"
+                                "text": "Create Waiver in IQ"
                             },
                             "style": "primary",
                             "url": payload.addWaiverLink

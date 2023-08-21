@@ -119,11 +119,11 @@ function formatAppEvaluationMSTeamsNotification(e) {
     console.log(scanURL)
 
     // Adjust message color
-    let color = "cc0029"
+    let color = "cc0029" // Red
     if(e.applicationEvaluation.criticalComponentCount == 0 && e.applicationEvaluation.severeComponentCount == 0){
-        color = "ff8400"
+        color = "ff8400" // Orange
         if(e.applicationEvaluation.moderateComponentCount == 0){
-            color = "4959b6"
+            color = "4959b6" // Blue
         }
     }
         
