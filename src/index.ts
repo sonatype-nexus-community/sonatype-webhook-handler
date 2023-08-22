@@ -52,12 +52,13 @@ const handlers = {
 app.post('/webhook', function (req: Request, res: Response) {
     const webhookId = req.get('X-Nexus-Webhook-Id')
     const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
+    
     handleWebhookRequest(webhookId as IqWebhookEvent, webhookDelivery, req.body, res)
-   
 })
 
 function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
-    console.debug(`\nProcessing WebHook Event ID ${eventId}...`)
+    console.log()
+    console.debug(`Processing WebHook Event ID ${eventId}...`)
     for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
         const rule: HandlerRule = CONFIG_DATA.rules[i]
         let webhookTarget: WebhookTarget
@@ -133,6 +134,7 @@ app.get('/test/applicaiton-evaluation', function (_req: Request, res: Response) 
     handleWebhookRequest(IqWebhookEvent.APPLICATION_EVALUATION, 'TEST-EVENT', payload, res)
 });
 
+
 app.get('/test/waiver-request', function (_req: Request, res: Response) {
     console.log('Received request for test Waiver Request message')
     let payload: IqWebhookPayloadWaiverRequest = {
@@ -150,4 +152,4 @@ app.get('/test/waiver-request', function (_req: Request, res: Response) {
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}/`)
 console.log(`   IQ SERVER at: ${IQ_SERVER_URL}`)
-console.log(`Loaded ${CONFIG_DATA.rules.length} Routing Rules from ${process.env.CONFIG_FILE_PATH}`)
+console.log(`   Loaded ${CONFIG_DATA.rules.length} Routing Rules from ${process.env.CONFIG_FILE_PATH}`)

@@ -16,16 +16,13 @@
 
 import { JiraWebhookTarget, WebhookTarget } from "../WebHookTarget"
 import { HandlerNotImplementedError } from "../error"
+import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types"
 import { BaseHandler } from "./base"
 
 
 export class JiraHandler extends BaseHandler {
 
-    public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
-        throw new HandlerNotImplementedError("Method not implemented.")
-    }
-    
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: JiraWebhookTarget): void {
         console.log(`Handling Waiver Request to JIRA with PK=${target.projectKey} and IT=${target.issueType}`)
         //Create Issue with API Docs: https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/
@@ -78,7 +75,7 @@ export class JiraHandler extends BaseHandler {
                                 },
                                 {
                                     "type": "text",
-                                    "text": "\""+payload.comment+"\"",
+                                    "text": "\"" + payload.comment + "\"",
                                     "marks": [
                                         {
                                             "type": "em"
@@ -108,9 +105,88 @@ export class JiraHandler extends BaseHandler {
                 }
             }
         }
+
+        target.sendMessage(message).catch((err) => {
+            console.error(`JIRA Error ${err.response.status}: ${JSON.stringify(err.response.data)}`)
+            console.error(err.message)
+        })
+    }
+
+
+    public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: JiraWebhookTarget): void {
+        console.log(`Handling Waiver Request to JIRA with PK=${target.projectKey} and IT=${target.issueType}`)
+
+        const message = {
+            "fields": {
+                "summary": "Sonatype IQ Evaluation Results",
+                "issuetype": {
+                    "name": target.issueType
+                },
+                "project": {
+                    "key": target.projectKey
+                },
+                "description": {
+                    "type": "doc",
+                    "version": 1,
+                    "content": [
+                        {
+                            "type": "paragraph",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": "Sonatype Scan Result for "
+                                },
+                                {
+                                    "type": "text",
+                                    "text": payload.applicationEvaluation.application.name,
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        },
+                                        {
+                                            "type": "em"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": `\n Application Evaluation Report:`,
+                                    "marks": [
+                                        {
+                                            "type": "strong"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "text",
+                                    "text": `\n\t- Affected Components:\t ${payload.applicationEvaluation.affectedComponentCount} \n\t- Critical Issues:\t ${payload.applicationEvaluation.criticalComponentCount} \n\t- Severe Issues:\t ${payload.applicationEvaluation.severeComponentCount} \n\t- Moderate Issues:\t ${payload.applicationEvaluation.moderateComponentCount} \n Evaluation Date: ${payload.applicationEvaluation.evaluationDate} \nStage: ${payload.applicationEvaluation.stage} \nOutcome: ${payload.applicationEvaluation.outcome}`,
+                                },
+                                {
+                                    "type": "text",
+                                    "text": "\nView Evaluation in Sonatype IQ",
+                                    "marks": [
+                                        {
+                                            "type": "link",
+                                            "attrs": {
+                                                "href": getIqUrlForApplicationEvaluation(payload),
+                                                "title": "IQ URL"
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+
         target.sendMessage(message).catch((err) => {
             console.error(`JIRA Error ${err.response.status}: ${JSON.stringify(err.response.data)}`)
             console.error(err.message)
         })
     }
 }
+
+
+

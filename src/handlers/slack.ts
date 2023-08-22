@@ -64,7 +64,7 @@ export class SlackHandler extends BaseHandler {
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         const message = {
-            "text": "Sonatype IQ Evaluation",
+            "text": "New Sonatype IQ Evaluation Results",
             "blocks": [
                 {
                     "type": "header",
