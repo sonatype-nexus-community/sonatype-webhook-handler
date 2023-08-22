@@ -73,6 +73,8 @@ On Slack we need to create an app to listen for our Webhooks from Sonatype Lifec
 
 Follow the official [Sonatype Documentation](https://help.sonatype.com/iqserver/automating/iq-server-webhooks) to add this handler as a Webhook. 
 
+The URL to add is `http://localhost:3000/webhook`. Don't forget to substitue the Protocoal, Domain Name and Port if you are running this service behind a Reverse Proxy or in Kubernetes.
+
 ![Installation Step 1](./images/sonatype-iq-add-webhook.png)
 
 Supported WebHook Events currently are:
