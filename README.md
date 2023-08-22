@@ -33,6 +33,30 @@ Create a `config.json` file formatted like the provided `example.config.json` in
 
 The `config.json` will allow you to configure multiple endpoints for a single message from Sonatype IQ. You can configure 1 or several message types.
 
+```
+{
+    "rules": [
+        {
+            "handler": "PLATFORM", // SLACK, MS TEAMS, OR JIRA
+            "events": [  //"APPLICATION_EVALUATION", "WAIVER_REQUEST" or both (as shown below)
+                "APPLICATION_EVALUATION", 
+                "WAIVER_REQUEST"
+            ],
+            "handlerConfig": {
+                "url": "URL-TO-WEBHOOK" // SLACK, MS TEAMS, OR JIRA Webhook/API link
+
+                "authorization": "BASE64 encoded value", // JIRA ONLY
+                "issueType": "Task", // JIRA ONLY
+                "projectKey": "PK" // JIRA ONLY
+            },
+            "applications": "DEFAULT" // DEFAULT ONLY (currently)
+        },
+    ]
+}
+```
+
+Create a new object in "rules" array for each desired platform and URL (SLACK, TEAMS, JIRA).
+
 *NOTE: Currently the "applications" key only allows for the value to be "DEFAULT". Currently the "events" array is only configured for "APPLICATION_EVALUATION" and "WAIVER_REQUEST" for Slack, Microsoft Teams, and Jira.*
 
 ### Configure Jira
