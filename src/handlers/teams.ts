@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+// Docs and markdown: https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using?tabs=cURL
+
+
 import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 import { WebhookTarget } from "../WebHookTarget";
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types";
 import { BaseHandler } from "./base";
-
 import template from "../templates/adaptive-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 import { HandlerNotImplementedError } from "../error"

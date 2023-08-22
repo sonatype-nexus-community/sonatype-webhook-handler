@@ -29,11 +29,11 @@ This project contains an example (working) Web Hook handler for [Sonatype Lifecy
 
 #### Create a local config.json
 
-Create a `config.json` file formatted like the provided `example.config.json`.
+Create a `config.json` file formatted like the provided `example.config.json` in the `examples/` directory.
 
 The `config.json` will allow you to configure multiple endpoints for a single message from Sonatype IQ. You can configure 1 or several message types.
 
-*NOTE: Currently the "applications" key only allows for the value to be "DEFAULT". Currently the "events" array is only configured for "APPLICATION_EVALUATION" for Slack and Microsoft Teams and WAIVER_REQUEST for Jira.*
+*NOTE: Currently the "applications" key only allows for the value to be "DEFAULT". Currently the "events" array is only configured for "APPLICATION_EVALUATION" and "WAIVER_REQUEST" for Slack, Microsoft Teams, and Jira.*
 
 ### Configure Jira
 
@@ -45,8 +45,8 @@ Configuring the Jira API to create issues is dependent on the version of Jira yo
    ```
    echo -n '<YOUR-EMAIL-ADDRESS>:<YOUR-API-TOKEN>' | base64
    ```
+4. REST calls can then be made to your Jira URL: `https://YOUR-JIRA-URL/rest/api/3/issue`
 
-Want to change the output? Here are the Jira Markdown Docs: [https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote](https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote)
 
 ### Configure Microsoft Teams
 
@@ -67,7 +67,7 @@ On Slack we need to create an app to listen for our Webhooks from Sonatype Lifec
 4. Toggle "On" the Activate Incoming Webhooks then click "Add New Webhook to Workspace"
 5. Select the channel or contact we want to forward the Webhook messages to
 6. Copy that Webhook URL - you'll need it later!
-7. You can also update the display information at the bottom of the *Basic Information* page with the Sonatype logo (The icon is in attached in the "images" directory)
+7. You can also update the display information at the bottom of the *Basic Information* page with the Sonatype logo (The icon is in attached in the `images/` directory)
 
 ### Configure Sonatype Lifecycle
 
@@ -77,6 +77,7 @@ Follow the official [Sonatype Documentation](https://help.sonatype.com/iqserver/
 
 Supported WebHook Events currently are:
 - Application Evaluation
+- Violation Alert
 - Waiver Request
 
 
@@ -102,11 +103,12 @@ services:
 
 Then you can just run: `docker-compose up -d .`
 
+
 ### Manually (from source) - not recommended
 
 You can run this on any Node 16 or Node 18 environment. 
 
-1. Run `npm install` to obtain the required depnedencies
+1. Run `npm install` to obtain the required dependencies
 2. Create a `.env` file as follows:
    ```
    CONFIG_FILE_PATH=/your/path/to/your/config.json

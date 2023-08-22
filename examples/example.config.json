@@ -2,7 +2,8 @@
     "rules": [
         {
             "events": [
-                "APPLICATION_EVALUATION"
+                "APPLICATION_EVALUATION",
+                "WAIVER_REQUEST"
             ],
             "handler": "SLACK",
             "handlerConfig": {
@@ -12,7 +13,8 @@
         },
         {
             "events": [
-                "APPLICATION_EVALUATION"
+                "APPLICATION_EVALUATION",
+                "WAIVER_REQUEST"
             ],
             "handler": "TEAMS",
             "handlerConfig": {
@@ -22,6 +24,7 @@
         },
         {
             "events": [
+                "APPLICATION_EVALUATION",
                 "WAIVER_REQUEST"
             ],
             "handler": "JIRA",

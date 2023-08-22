@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+//Create Issue with API Docs: https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/
+//Jira Markdown Docs: https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote/
+
 import { JiraWebhookTarget, WebhookTarget } from "../WebHookTarget"
 import { HandlerNotImplementedError } from "../error"
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
@@ -25,8 +28,6 @@ export class JiraHandler extends BaseHandler {
 
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: JiraWebhookTarget): void {
         console.log(`Handling Waiver Request to JIRA with PK=${target.projectKey} and IT=${target.issueType}`)
-        //Create Issue with API Docs: https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/
-        //Jira Markdown Docs: https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote/
         const message = {
             "fields": {
                 "summary": "New Sonatype Platform Policy Waiver Request",
