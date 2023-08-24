@@ -57,7 +57,6 @@ app.post('/webhook', function (req: Request, res: Response) {
 })
 
 function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
-    console.log()
     console.debug(`Processing WebHook Event ID ${eventId}...`)
     for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
         const rule: HandlerRule = CONFIG_DATA.rules[i]
