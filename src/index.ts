@@ -52,12 +52,11 @@ const handlers = {
 app.post('/webhook', function (req: Request, res: Response) {
     const webhookId = req.get('X-Nexus-Webhook-Id')
     const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
-    
     handleWebhookRequest(webhookId as IqWebhookEvent, webhookDelivery, req.body, res)
 })
 
 function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
-    console.debug(`Processing WebHook Event ID ${eventId}...`)
+    console.debug(`\nProcessing WebHook Event ID ${eventId}...`)
     for (let i = 0; i < CONFIG_DATA.rules.length; i++) {
         const rule: HandlerRule = CONFIG_DATA.rules[i]
         let webhookTarget: WebhookTarget

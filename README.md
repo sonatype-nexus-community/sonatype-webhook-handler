@@ -97,6 +97,8 @@ On Slack we need to create an app to listen for our Webhooks from Sonatype Lifec
 
 Follow the official [Sonatype Documentation](https://help.sonatype.com/iqserver/automating/iq-server-webhooks) to add this handler as a Webhook. 
 
+The URL to add is `http://localhost:3000/webhook`. Don't forget to substitue the Protocoal, Domain Name and Port if you are running this service behind a Reverse Proxy or in Kubernetes.
+
 ![Installation Step 1](./images/sonatype-iq-add-webhook.png)
 
 Supported WebHook Events currently are:
@@ -111,6 +113,16 @@ Supported WebHook Events currently are:
 
 This webhook handler is published as a Docker Image to Docker Hub.
 
+You can quickly run with a native `docker run` command as follows:
+```
+docker run \
+  -e CONFIG_FILE_PATH=/config.json \
+  -e IQ_SERVER_URL=http://localhost:8070 \
+  -p 3000:3000 \
+  -v /path/to/your/config.json:/config.json \
+  sonatypecommunity/sonatype-webhook-handler:latest
+```
+
 An example `docker-compose.yml` might be:
 
 ```
@@ -118,11 +130,13 @@ services:
    webhook-teams:
     image: sonatype-webhook-handler:latest
     environment:
-      - CONFIG_FILE_PATH=/your/path/to/your/config.json
+      - CONFIG_FILE_PATH=/config.json
       - IQ_SERVER_URL=[YOUR_IQ_SERVER_URL_HERE]
       - PORT=3000
     ports:
       - '3000:3000'
+    volumes: 
+      - /your/path/to/your/config.json:/config.json:ro
 ```
 
 Then you can just run: `docker-compose up -d .`
