@@ -103,7 +103,6 @@ The URL to add is `http://localhost:3000/webhook`. Don't forget to substitue the
 
 Supported WebHook Events currently are:
 - Application Evaluation
-- Violation Alert
 - Waiver Request
 
 

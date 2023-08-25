@@ -18,12 +18,5 @@ import { IqWebhookPayloadApplicationEvaluation } from "../types";
 import { IQ_SERVER_URL } from '..';
 
 export function getIqUrlForApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation): string {
-    let last = IQ_SERVER_URL.slice(-1);
-    if (last != "/"){
-        last = "/"
-    }else{
-        last = ""
-    }
-
-    return `${IQ_SERVER_URL}${last}assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
+    return `${IQ_SERVER_URL}assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
 }

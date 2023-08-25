@@ -119,7 +119,7 @@ export class JiraHandler extends BaseHandler {
 
         const message = {
             "fields": {
-                "summary": "Sonatype IQ Evaluation Results",
+                "summary": "Sonatype Lifecycle Evaluation Results",
                 "issuetype": {
                     "name": target.issueType
                 },
@@ -135,7 +135,7 @@ export class JiraHandler extends BaseHandler {
                             "content": [
                                 {
                                     "type": "text",
-                                    "text": "Sonatype Scan Result for "
+                                    "text": "Sonatype Platform Scan Result for "
                                 },
                                 {
                                     "type": "text",
@@ -164,13 +164,13 @@ export class JiraHandler extends BaseHandler {
                                 },
                                 {
                                     "type": "text",
-                                    "text": "\nView Evaluation in Sonatype IQ",
+                                    "text": "\nView Evaluation in Sonatype Lifecycle",
                                     "marks": [
                                         {
                                             "type": "link",
                                             "attrs": {
                                                 "href": getIqUrlForApplicationEvaluation(payload),
-                                                "title": "IQ URL"
+                                                "title": "Sonatype Lifecycle URL"
                                             }
                                         }
                                     ]

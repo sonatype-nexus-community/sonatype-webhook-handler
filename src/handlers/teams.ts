@@ -23,12 +23,13 @@ import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } 
 import { BaseHandler } from "./base";
 import template from "../templates/adaptive-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
+import { getIQColor } from "../constants";
 import { HandlerNotImplementedError } from "../error"
 
 export class TeamsHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        const color = "ff8400" // Orange
+        const color = getIQColor("orange") // Orange
         const message = {
             "@type": "MessageCard",
             "@context": "http://schema.org/extensions",
@@ -49,7 +50,7 @@ export class TeamsHandler extends BaseHandler {
             }],
             "potentialAction": [ {
                 "@type": "OpenUri",
-                "name": "Create Waiver in IQ",
+                "name": "Create Waiver in the Sonatype Platform",
                 "targets": [{
                     "os": "default",
                     "uri": payload.addWaiverLink
@@ -64,7 +65,7 @@ export class TeamsHandler extends BaseHandler {
         target.sendAdaptiveCard(
             AdaptiveCards.declare(template).render(
             {
-                "title": `Sonatype Scan Result for ${payload.applicationEvaluation.application.name}`,
+                "title": `Sonatype Platform Scan Result for ${payload.applicationEvaluation.application.name}`,
                 "stage": payload.applicationEvaluation.stage,
                 "application": payload.applicationEvaluation.application.name,
                 "critical": payload.applicationEvaluation.criticalComponentCount,

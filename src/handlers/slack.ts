@@ -47,7 +47,7 @@ export class SlackHandler extends BaseHandler {
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "Create Waiver in IQ"
+                                "text": "Create Waiver in the Sonatype Platform"
                             },
                             "style": "primary",
                             "url": payload.addWaiverLink
@@ -64,20 +64,20 @@ export class SlackHandler extends BaseHandler {
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         const message = {
-            "text": "New Sonatype IQ Evaluation Results",
+            "text": "New Sonatype Platform Evaluation Results",
             "blocks": [
                 {
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": `Sonatype Scan Result for ${payload.applicationEvaluation.application.name}`
+                        "text": `Sonatype Platform Scan Result for ${payload.applicationEvaluation.application.name}`
                     }
                 }, {
                     "type": "section",
                     "fields": [
                         {
                             "type": "mrkdwn",
-                            "text": "*Application Evaluation Report*\n\n" + "\t*- Affected Components:*\t" + payload.applicationEvaluation.affectedComponentCount + "\n" + "\t*- Critical Components:*\t" + payload.applicationEvaluation.criticalComponentCount + "\n" + "\t*- Severe Components:*\t" + payload.applicationEvaluation.severeComponentCount + "\n" + "\t*- Moderate Components:*\t" + payload.applicationEvaluation.moderateComponentCount + "\n" + "\n\n*Evaluation Date*: \n\t" + payload.applicationEvaluation.evaluationDate + "\n" + "*Stage:* " + payload.applicationEvaluation.stage + "\n" + "*Outcome:* " + payload.applicationEvaluation.outcome + "\n"
+                            "text": "*Application Evaluation Report*\n\n" + "\t*- Affected Components:*\t" + payload.applicationEvaluation.affectedComponentCount + "\n" + "\t*- Critical Issues:*\t" + payload.applicationEvaluation.criticalComponentCount + "\n" + "\t*- Severe Issues:*\t" + payload.applicationEvaluation.severeComponentCount + "\n" + "\t*- Moderate Issues:*\t" + payload.applicationEvaluation.moderateComponentCount + "\n" + "\n\n*Evaluation Date*: \n\t" + payload.applicationEvaluation.evaluationDate + "\n" + "*Stage:* " + payload.applicationEvaluation.stage + "\n" + "*Outcome:* " + payload.applicationEvaluation.outcome + "\n"
                         },
                     ]
                 }, {

@@ -29,10 +29,7 @@ require('dotenv').config()
 const app: Express = express()
 app.use(express.json());
 
-/**
- * Fill in your incoming webhook url.
- */
-export const IQ_SERVER_URL: string = process.env.IQ_SERVER_URL
+export const IQ_SERVER_URL: string = (process.env.IQ_SERVER_URL.slice(-1) != "/") ? process.env.IQ_SERVER_URL+"/" : process.env.IQ_SERVER_URL
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
 
 let CONFIG_DATA: Configuration = { "rules": [] }
