@@ -15,3 +15,5 @@
  */
 
 export class HandlerNotImplementedError extends Error { }
+
+export class UnknownWebHookEventType extends Error { }

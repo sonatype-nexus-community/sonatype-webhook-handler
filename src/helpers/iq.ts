@@ -14,9 +14,20 @@
  * limitations under the License.
  */
 
-import { IqWebhookPayloadApplicationEvaluation } from "../types";
-import { IQ_SERVER_URL } from '..';
+import { IqWebhookEvent } from "../constants"
+import { UnknownWebHookEventType } from "../error"
+import { IqWebhookPayloadApplicationEvaluation } from "../types"
 
-export function getIqUrlForApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation): string {
-    return `${IQ_SERVER_URL}/assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
+export function getIqUrlForApplicationEvaluation(iqServerUrl: string, payload: IqWebhookPayloadApplicationEvaluation): string {
+    return `${iqServerUrl}/assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`
+}
+
+export function validateWebHookEventType(eventType: string): IqWebhookEvent {
+    for (let et of Object.keys(IqWebhookEvent)) {
+        if (IqWebhookEvent[et] === eventType) {
+            return eventType as IqWebhookEvent
+        }
+    }
+
+    throw new UnknownWebHookEventType(`${eventType} is not a supported Webhook Event Type`)
 }

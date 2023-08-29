@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { IQ_SERVER_URL } from ".."
 import { WebhookTarget } from "../WebHookTarget";
 import { HandlerNotImplementedError } from "../error"
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
@@ -54,7 +55,7 @@ export class SlackHandler extends BaseHandler {
                                 "text": "View Report"
                             },
                             "style": "primary",
-                            "url": getIqUrlForApplicationEvaluation(payload)
+                            "url": getIqUrlForApplicationEvaluation(IQ_SERVER_URL, payload)
                         }
                     ]
                 }
