@@ -52,8 +52,10 @@ const handlers = {
 app.post('/webhook', function (req: Request, res: Response) {
     const webhookId = req.get('X-Nexus-Webhook-Id')
     const webhookDelivery = req.get('X-Nexus-Webhook-Delivery')
+
+    // Call validateWebHookEventType ?
+
     handleWebhookRequest(webhookId as IqWebhookEvent, webhookDelivery, req.body, res)
-   
 })
 
 function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payload: IqWebhookPayload, res: Response) {
