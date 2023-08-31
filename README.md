@@ -64,7 +64,7 @@ On Slack we need to create an app to listen for our Webhooks from Sonatype Lifec
 
 Create a `config.json` file formatted like the provided `example.config.json` in the `examples/` directory.
 
-The `config.json` will allow you to configure multiple endpoints for a single message from Sonatype IQ. You can configure 1 or several message types.
+The `config.json` will allow you to configure multiple endpoints for a single message from the Sonatype Platform. You can configure 1 or several message types.
 
 ```
 {
