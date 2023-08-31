@@ -23,17 +23,16 @@ import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } 
 import { BaseHandler } from "./base";
 import template from "../templates/adaptive-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
-import { getIQColor } from "../constants";
+import { COLOR_ORANGE } from "../constants";
 import { HandlerNotImplementedError } from "../error"
 
 export class TeamsHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        const color = getIQColor("orange") // Orange
         const message = {
             "@type": "MessageCard",
             "@context": "http://schema.org/extensions",
-            "themeColor": color,
+            "themeColor": COLOR_ORANGE,
             "summary": "New Sonatype Platform Policy Waiver Request",
             "sections": [{
                 "activityTitle": "New Sonatype Platform Policy Waiver Request",

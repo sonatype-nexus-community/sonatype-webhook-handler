@@ -17,7 +17,6 @@
 export enum IqWebhookEvent {
     APPLICATION_EVALUATION = 'iq:applicationEvaluation',
     WAIVER_REQUEST = 'iq:waiverRequest',
-    // POLICY_ALERT = 'iq:policyAlert' // Violation Alert
 }
 
 export function getEnumKeyByEnumValue(myEnum, enumValue) {
@@ -25,28 +24,9 @@ export function getEnumKeyByEnumValue(myEnum, enumValue) {
     return keys.length > 0 ? keys[0] : null;
 }
 
-export function getIQColor(color){
-    let resp = ""
-    switch (color){
-        case "yellow":
-            resp = "#ffc233" // Yellow
-            break
-        case "orange":
-            resp = "#ff8400" // Orange
-            break
-        case "red":
-            resp = "#cc0029" // Red
-            break
-        case "green":
-            resp = "#57B779" // Green
-            break
-        case "purple":
-            resp = "#A72CC1" // Purple
-            break
-        case "blue":
-        default:
-            resp = "#2C64E9" // Default Blue
-            break
-    }
-    return resp
-}
+export const COLOR_YELLOW = '#ffc233'
+export const COLOR_ORANGE = '#ff8400'
+export const COLOR_RED = '#cc0029'
+export const COLOR_GREEN = '#57B779'
+export const COLOR_PURPLE = '#A72CC1'
+export const COLOR_BLUE = '#2C64E9'

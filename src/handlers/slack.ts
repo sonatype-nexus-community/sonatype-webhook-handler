@@ -47,7 +47,7 @@ export class SlackHandler extends BaseHandler {
                             "type": "button",
                             "text": {
                                 "type": "plain_text",
-                                "text": "Create Waiver in the Sonatype Platform"
+                                "text": "Create Waiver in Sonatype"
                             },
                             "style": "primary",
                             "url": payload.addWaiverLink

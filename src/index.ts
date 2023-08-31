@@ -29,21 +29,30 @@ require('dotenv').config()
 const app: Express = express()
 app.use(express.json());
 
-export const IQ_SERVER_URL: string = (process.env.IQ_SERVER_URL.slice(-1) != "/") ? process.env.IQ_SERVER_URL+"/" : process.env.IQ_SERVER_URL
+export const IQ_SERVER_URL: string = verifyIQServerURL(process.env.IQ_SERVER_URL)
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
+const CONFIG_DATA = verifyConfigurationJSON()
 
-let CONFIG_DATA: Configuration = { "rules": [] }
-try {
-    CONFIG_DATA = require(process.env.CONFIG_FILE_PATH)
-} catch (err) {
-    console.error(`Failed to load config - are you sure it's valid? ${err}`)
-    process.exit(1)
-}
 
 const handlers = {
     [HandlerType.JIRA]: new JiraHandler(),
     [HandlerType.SLACK]: new SlackHandler(),
     [HandlerType.TEAMS]: new TeamsHandler()
+}
+
+function verifyIQServerURL(url: string){
+    return (url.slice(-1) != "/") ? url+"/" : url
+}
+
+function verifyConfigurationJSON(){
+    let config: Configuration = { "rules": [] }
+    try {
+        config = require(process.env.CONFIG_FILE_PATH)
+    } catch (err) {
+        console.error(`Failed to load config - are you sure it's valid? ${err}`)
+        process.exit(1)
+    }
+    return config
 }
 
 app.post('/webhook', function (req: Request, res: Response) {
