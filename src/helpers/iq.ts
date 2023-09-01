@@ -18,5 +18,5 @@ import { IqWebhookPayloadApplicationEvaluation } from "../types";
 import { IQ_SERVER_URL } from '..';
 
 export function getIqUrlForApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation): string {
-    return `${IQ_SERVER_URL}/assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
+    return `${IQ_SERVER_URL}assets/index.html#/applicationReport/${payload.applicationEvaluation.application.publicId}/${payload.applicationEvaluation.reportId}/policy`;
 }

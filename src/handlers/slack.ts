@@ -23,25 +23,61 @@ import { BaseHandler } from "./base";
 export class SlackHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new HandlerNotImplementedError("Method not implemented.")
-    }
-    
-    public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         const message = {
-            "text": "TESTING",
+            "text": "New Sonatype Platform Policy Waiver Request",
             "blocks": [
                 {
                     "type": "header",
                     "text": {
                         "type": "plain_text",
-                        "text": `Sonatype Scan Result for ${payload.applicationEvaluation.application.name}`
+                        "text": `New Sonatype Platform Policy Waiver Request`
                     }
                 }, {
                     "type": "section",
                     "fields": [
                         {
                             "type": "mrkdwn",
-                            "text": "*Application Evaluation Report*\n\n" + "\t*- Affected Components:*\t" + payload.applicationEvaluation.affectedComponentCount + "\n" + "\t*- Critical Components:*\t" + payload.applicationEvaluation.criticalComponentCount + "\n" + "\t*- Severe Components:*\t" + payload.applicationEvaluation.severeComponentCount + "\n" + "\t*- Moderate Components:*\t" + payload.applicationEvaluation.moderateComponentCount + "\n" + "\n\n*Evaluation Date*: \n\t" + payload.applicationEvaluation.evaluationDate + "\n" + "*Stage:* " + payload.applicationEvaluation.stage + "\n" + "*Outcome:* " + payload.applicationEvaluation.outcome + "\n"
+                            "text": `*${payload.initiator}* has requested a policy violation waiver on the Sonatype Platform.\nRead more about this issue here: <${payload.policyViolationLink}|Violation Details> \nRequest note:\n\t_\"${payload.comment}\"_`
+                        },
+                    ]
+                }, {
+                    "type": "actions",
+                    "elements": [
+                        {
+                            "type": "button",
+                            "text": {
+                                "type": "plain_text",
+                                "text": "Create Waiver in Sonatype"
+                            },
+                            "style": "primary",
+                            "url": payload.addWaiverLink
+                        }
+                    ]
+                }
+                
+            ]
+        }
+
+        target.sendMessage(message).catch(err => console.error(`Slack Error ${err}: ${err.response.data}`))
+    }
+    
+    
+    public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
+        const message = {
+            "text": "New Sonatype Platform Evaluation Results",
+            "blocks": [
+                {
+                    "type": "header",
+                    "text": {
+                        "type": "plain_text",
+                        "text": `Sonatype Platform Scan Result for ${payload.applicationEvaluation.application.name}`
+                    }
+                }, {
+                    "type": "section",
+                    "fields": [
+                        {
+                            "type": "mrkdwn",
+                            "text": "*Application Evaluation Report*\n\n" + "\t*- Affected Components:*\t" + payload.applicationEvaluation.affectedComponentCount + "\n" + "\t*- Critical Issues:*\t" + payload.applicationEvaluation.criticalComponentCount + "\n" + "\t*- Severe Issues:*\t" + payload.applicationEvaluation.severeComponentCount + "\n" + "\t*- Moderate Issues:*\t" + payload.applicationEvaluation.moderateComponentCount + "\n" + "\n\n*Evaluation Date*: \n\t" + payload.applicationEvaluation.evaluationDate + "\n" + "*Stage:* " + payload.applicationEvaluation.stage + "\n" + "*Outcome:* " + payload.applicationEvaluation.outcome + "\n"
                         },
                     ]
                 }, {
