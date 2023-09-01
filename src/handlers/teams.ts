@@ -21,7 +21,7 @@ import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 import { WebhookTarget } from "../WebHookTarget";
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types";
 import { BaseHandler } from "./base";
-import template from "../templates/adaptive-card-default.json";
+import template from "../templates/adaptive-teams-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 import { COLOR_ORANGE } from "../constants";
 import { HandlerNotImplementedError } from "../error"
@@ -37,7 +37,6 @@ export class TeamsHandler extends BaseHandler {
             "sections": [{
                 "activityTitle": "New Sonatype Platform Policy Waiver Request",
                 "activitySubtitle": `Requested By: ${payload.initiator}`,
-                // "activityImage": "https://teamsnodesample.azurewebsites.net/static/img/image5.png",
                 "facts": [ {
                     "name": "Read More Here: ",
                     "value": `[Violation Details](${payload.policyViolationLink})`

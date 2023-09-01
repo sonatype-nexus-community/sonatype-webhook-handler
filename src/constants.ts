@@ -16,7 +16,7 @@
 
 export enum IqWebhookEvent {
     APPLICATION_EVALUATION = 'iq:applicationEvaluation',
-    WAIVER_REQUEST = 'iq:waiverRequest',
+    WAIVER_REQUEST = 'iq:waiverRequest'
 }
 
 export function getEnumKeyByEnumValue(myEnum, enumValue) {
