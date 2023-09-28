@@ -157,7 +157,7 @@ You can run this on any Node 16 or Node 18 environment.
 ## Testing
 
 You can quickly test the handler by accessing one of the test URLs:
-- [http://localhost:3000/test/applicaiton-evaluation](http://localhost:3000/test/applicaiton-evaluation){:target="_blank"} - will simulate an example Application Evaluation Webhook being received from Sonatype Lifecycle
+- [http://localhost:3000/test/application-evaluation](http://localhost:3000/test/application-evaluation){:target="_blank"} - will simulate an example Application Evaluation Webhook being received from Sonatype Lifecycle
 - [http://localhost:3000/test/waiver-request](http://localhost:3000/test/waiver-request){:target="_blank"} - will simulate an example Waiver Request Webhook being received from Sonatype Lifecycle
 
 Your rules (as defined in your `config.json`) will be applied to the simulated payloads.

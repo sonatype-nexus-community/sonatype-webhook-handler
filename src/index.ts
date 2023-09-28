@@ -110,7 +110,7 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
     res.send({status: 200})
 }
 
-app.get('/test/applicaiton-evaluation', function (_req: Request, res: Response) {
+app.get('/test/application-evaluation', function (_req: Request, res: Response) {
     console.log('Received request for test Application Evaluation message')
     let payload: IqWebhookPayloadApplicationEvaluation = {
         "timestamp": "2020-04-22T18:30:04.673+0000",
