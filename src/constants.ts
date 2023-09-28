@@ -23,3 +23,10 @@ export function getEnumKeyByEnumValue(myEnum, enumValue) {
     let keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
     return keys.length > 0 ? keys[0] : null;
 }
+
+export const COLOR_YELLOW = '#ffc233'
+export const COLOR_ORANGE = '#ff8400'
+export const COLOR_RED = '#cc0029'
+export const COLOR_GREEN = '#57B779'
+export const COLOR_PURPLE = '#A72CC1'
+export const COLOR_BLUE = '#2C64E9'
