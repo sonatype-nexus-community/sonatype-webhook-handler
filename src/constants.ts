@@ -18,8 +18,3 @@ export enum IqWebhookEvent {
     APPLICATION_EVALUATION = 'iq:applicationEvaluation',
     WAIVER_REQUEST = 'iq:waiverRequest'
 }
-
-export function getEnumKeyByEnumValue(myEnum, enumValue) {
-    let keys = Object.keys(myEnum).filter(x => myEnum[x] == enumValue);
-    return keys.length > 0 ? keys[0] : null;
-}
