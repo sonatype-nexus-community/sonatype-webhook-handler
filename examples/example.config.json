@@ -1,29 +1,28 @@
 {
     "rules": [
         {
-            "events": [
-                "APPLICATION_EVALUATION"
-            ],
             "handler": "SLACK",
             "handlerConfig": {
                 "url": "https://hooks.slack.com/services/..."
             },
-            "applications": "DEFAULT"
-        },
-        {
             "events": [
-                "APPLICATION_EVALUATION"
-            ],
-            "handler": "TEAMS",
-            "handlerConfig": {
-                "url": "https://sonatype.webhook.office.com/webhookb2/..."
-            },
-            "applications": "DEFAULT"
-        },
-        {
-            "events": [
+                "APPLICATION_EVALUATION",
                 "WAIVER_REQUEST"
             ],
+            "applications": "DEFAULT"
+        },
+        {
+            "handler": "TEAMS",
+            "handlerConfig": {
+                "url": "https://COMPANY.webhook.office.com/webhookb2/..."
+            },
+            "events": [
+                "APPLICATION_EVALUATION",
+                "WAIVER_REQUEST"
+            ],
+            "applications": "DEFAULT"
+        },
+        {
             "handler": "JIRA",
             "handlerConfig": {
                 "url": "https://MY-JIRA-URL/rest/api/3/issue",
@@ -31,6 +30,10 @@
                 "issueType": "Task",
                 "projectKey": "PK"
             },
+            "events": [
+                "APPLICATION_EVALUATION",
+                "WAIVER_REQUEST"
+            ],
             "applications": "DEFAULT"
         }
     ]

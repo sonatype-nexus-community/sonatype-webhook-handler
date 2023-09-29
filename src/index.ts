@@ -29,24 +29,30 @@ require('dotenv').config()
 const app: Express = express()
 app.use(express.json());
 
-/**
- * Fill in your incoming webhook url.
- */
-export const IQ_SERVER_URL: string = process.env.IQ_SERVER_URL
+export const IQ_SERVER_URL: string = verifyIQServerURL(process.env.IQ_SERVER_URL)
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000
+const CONFIG_DATA = verifyConfigurationJSON()
 
-let CONFIG_DATA: Configuration = { "rules": [] }
-try {
-    CONFIG_DATA = require(process.env.CONFIG_FILE_PATH)
-} catch (err) {
-    console.error(`Failed to load config - are you sure it's valid? ${err}`)
-    process.exit(1)
-}
 
 const handlers = {
     [HandlerType.JIRA]: new JiraHandler(),
     [HandlerType.SLACK]: new SlackHandler(),
     [HandlerType.TEAMS]: new TeamsHandler()
+}
+
+function verifyIQServerURL(url: string){
+    return (url.slice(-1) != "/") ? url+"/" : url
+}
+
+function verifyConfigurationJSON(){
+    let config: Configuration = { "rules": [] }
+    try {
+        config = require(process.env.CONFIG_FILE_PATH)
+    } catch (err) {
+        console.error(`Failed to load config - are you sure it's valid? ${err}`)
+        process.exit(1)
+    }
+    return config
 }
 
 app.post('/webhook', function (req: Request, res: Response) {
@@ -107,7 +113,7 @@ function handleWebhookRequest(eventType: IqWebhookEvent, eventId: string, payloa
     res.send({status: 200})
 }
 
-app.get('/test/applicaiton-evaluation', function (_req: Request, res: Response) {
+app.get('/test/application-evaluation', function (_req: Request, res: Response) {
     console.log('Received request for test Application Evaluation message')
     let payload: IqWebhookPayloadApplicationEvaluation = {
         "timestamp": "2020-04-22T18:30:04.673+0000",
@@ -135,12 +141,13 @@ app.get('/test/applicaiton-evaluation', function (_req: Request, res: Response) 
     handleWebhookRequest(IqWebhookEvent.APPLICATION_EVALUATION, 'TEST-EVENT', payload, res)
 });
 
+
 app.get('/test/waiver-request', function (_req: Request, res: Response) {
     console.log('Received request for test Waiver Request message')
     let payload: IqWebhookPayloadWaiverRequest = {
         timestamp: '2023-08-16T17:32:06.147+00:00',
         initiator: 'admin',
-        comment: '',
+        comment: 'waiver request comment',
         policyViolationId: '69e917987e1b4b3b8ea8c2930e0bdce3',
         policyViolationLink: 'http://localhost:8070/assets/#/violation/69e917987e1b4b3b8ea8c2930e0bdce3',
         addWaiverLink: 'http://localhost:8070/assets/#/addWaiver/69e917987e1b4b3b8ea8c2930e0bdce3'
@@ -152,4 +159,4 @@ app.get('/test/waiver-request', function (_req: Request, res: Response) {
 app.listen(PORT);
 console.log(`Running on http://localhost:${PORT}/`)
 console.log(`   IQ SERVER at: ${IQ_SERVER_URL}`)
-console.log(`Loaded ${CONFIG_DATA.rules.length} Routing Rules from ${process.env.CONFIG_FILE_PATH}`)
+console.log(`   Loaded ${CONFIG_DATA.rules.length} Routing Rules from ${process.env.CONFIG_FILE_PATH}`)

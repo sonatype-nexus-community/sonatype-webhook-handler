@@ -8,7 +8,7 @@ package-lock.json
 dev.config.json
 .env
 lib/*
-config-*.json
+config*.json
 
 # testing
 /coverage

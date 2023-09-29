@@ -6,7 +6,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/network)
 [![GitHub stars](https://img.shields.io/github/stars/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/stargazers)
 
-This project contains an example (working) Web Hook handler for [Sonatype Lifecycle](https://www.sonatype.com/products/open-source-security-dependency-management) that can publish messages to Microsoft Teams Channel(s), Slack Channel(s), or open Jira Issues.
+This project contains an example (working) Web Hook handler for [Sonatype Lifecycle](https://www.sonatype.com/products/open-source-security-dependency-management){:target="_blank"} that can publish messages to Microsoft Teams Channel(s), Slack Channel(s), or open Jira Issues.
 
 **Contents**
 
@@ -25,19 +25,9 @@ This project contains an example (working) Web Hook handler for [Sonatype Lifecy
 
 ## Configuration
 
-### Configure the Webhook Handler
-
-#### Create a local config.json
-
-Create a `config.json` file formatted like the provided `example.config.json`.
-
-The `config.json` will allow you to configure multiple endpoints for a single message from Sonatype IQ. You can configure 1 or several message types.
-
-*NOTE: Currently the "applications" key only allows for the value to be "DEFAULT". Currently the "events" array is only configured for "APPLICATION_EVALUATION" for Slack and Microsoft Teams and WAIVER_REQUEST for Jira.*
-
 ### Configure Jira
 
-Configuring the Jira API to create issues is dependent on the version of Jira you have in use (Cloud, Data-Center, etc.). This blog will be helpful for more detailed setup steps: [https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/](https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/)
+Configuring the Jira API to create issues is dependent on the version of Jira you have in use (Cloud, Data-Center, etc.). This blog will be helpful for more detailed setup steps: [https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/](https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/){:target="_blank"}
 
 1. Create a user API token
 2. Make a string of <YOUR-EMAIL-ADDRESS>:<YOUR-API-TOKEN>
@@ -45,13 +35,13 @@ Configuring the Jira API to create issues is dependent on the version of Jira yo
    ```
    echo -n '<YOUR-EMAIL-ADDRESS>:<YOUR-API-TOKEN>' | base64
    ```
+4. REST calls can then be made to your Jira URL: `https://YOUR-JIRA-URL/rest/api/3/issue`
 
-Want to change the output? Here are the Jira Markdown Docs: [https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote](https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote)
 
 ### Configure Microsoft Teams
 
 1. In Microsoft Teams head to the Channel where you wish messages to be posted
-2. Open the Channel Menu (three dots top right) and select Connectors
+2. Open the Channel Menu (three dots top right) and select "Connectors"
 3. Search for and add "Incoming Webhook"
 4. Configure the Incoming Webhook:
    - Upload an Image of your choice
@@ -61,17 +51,51 @@ Want to change the output? Here are the Jira Markdown Docs: [https://developer.a
 
 On Slack we need to create an app to listen for our Webhooks from Sonatype Lifecycle:  
 
-1. Go to the link to create the app: [https://api.slack.com/apps?new_app=1](https://api.slack.com/apps?new_app=1)
-2. Name the app "Sonatype Lifecycle" and select the workspace where we want this to operate
-3. Click "Add features and functionality"
-4. Toggle "On" the Activate Incoming Webhooks then click "Add New Webhook to Workspace"
-5. Select the channel or contact we want to forward the Webhook messages to
+1. Go to the link to create the app: [https://api.slack.com/apps?new_app=1](https://api.slack.com/apps?new_app=1){:target="_blank"}
+    - Name the app "Sonatype Lifecycle" and select the workspace where we want this to operate.
+2. Select "Add features and Functionality" and then "Incoming Webhooks" and toggle it on.
+3. Click "Add New Webhook to Workspace".
+5. Select the channel or contact we want to forward the Webhook messages to.
 6. Copy that Webhook URL - you'll need it later!
-7. You can also update the display information at the bottom of the *Basic Information* page with the Sonatype logo (The icon is in attached in the "images" directory)
+7. You can also update the display information at the bottom of the *Basic Information* page with the Sonatype logo (The icon is in attached in the `images/` directory).
+
+
+### Create a local config.json
+
+Create a `config.json` file formatted like the provided `example.config.json` in the `examples/` directory.
+
+The `config.json` will allow you to configure multiple endpoints for a single message from the Sonatype Platform. You can configure 1 or several message types.
+
+```
+{
+    "rules": [
+        {
+            "handler": "PLATFORM", // SLACK, MS TEAMS, OR JIRA
+            "events": [  //"APPLICATION_EVALUATION", "WAIVER_REQUEST" or both (as shown below)
+                "APPLICATION_EVALUATION", 
+                "WAIVER_REQUEST"
+            ],
+            "handlerConfig": {
+                "url": "URL-TO-WEBHOOK" // SLACK, MS TEAMS, OR JIRA Webhook/API link
+
+                "authorization": "BASE64 encoded value", // JIRA ONLY
+                "issueType": "Task", // JIRA ONLY
+                "projectKey": "PK" // JIRA ONLY
+            },
+            "applications": "DEFAULT" // DEFAULT ONLY (currently)
+        },
+    ]
+}
+```
+
+Create a new object in "rules" array for each desired platform and URL (SLACK, TEAMS, JIRA).
+
+*NOTE: Currently the "applications" key only allows for the value to be "DEFAULT". Currently the "events" array is only configured for "APPLICATION_EVALUATION" and "WAIVER_REQUEST" for Slack, Microsoft Teams, and Jira.*
+
 
 ### Configure Sonatype Lifecycle
 
-Follow the official [Sonatype Documentation](https://help.sonatype.com/iqserver/automating/iq-server-webhooks) to add this handler as a Webhook. 
+Follow the official [Sonatype Documentation](https://help.sonatype.com/iqserver/automating/iq-server-webhooks){:target="_blank"} to add this handler as a Webhook. 
 
 The URL to add is `http://localhost:3000/webhook`. Don't forget to substitue the Protocoal, Domain Name and Port if you are running this service behind a Reverse Proxy or in Kubernetes.
 
@@ -116,12 +140,13 @@ services:
 
 Then you can just run: `docker-compose up -d .`
 
+
 ### Manually (from source) - not recommended
 
 You can run this on any Node 16 or Node 18 environment. 
 
-1. Run `npm install` to obtain the required depnedencies
-2. Create a `.env` file as follows:
+1. Run `npm install` to obtain the required dependencies
+2. Create a `.env` file at the project root as follows:
    ```
    CONFIG_FILE_PATH=/your/path/to/your/config.json
    IQ_SERVER_URL=https://my-iq-server-url # Full URL to your Sonatype Lifecycle Server
@@ -132,8 +157,8 @@ You can run this on any Node 16 or Node 18 environment.
 ## Testing
 
 You can quickly test the handler by accessing one of the test URLs:
-- [http://localhost:3000/test/applicaiton-evaluation](http://localhost:3000/test/applicaiton-evaluation) - will simulate an example Application Evaluation Webhook being received from Sonatype Lifecycle
-- [http://localhost:3000/test/waiver-request](http://localhost:3000/test/waiver-request) - will simulate an example Waiver Request Webhook being received from Sonatype Lifecycle
+- [http://localhost:3000/test/application-evaluation](http://localhost:3000/test/application-evaluation){:target="_blank"} - will simulate an example Application Evaluation Webhook being received from Sonatype Lifecycle
+- [http://localhost:3000/test/waiver-request](http://localhost:3000/test/waiver-request){:target="_blank"} - will simulate an example Waiver Request Webhook being received from Sonatype Lifecycle
 
 Your rules (as defined in your `config.json`) will be applied to the simulated payloads.
 

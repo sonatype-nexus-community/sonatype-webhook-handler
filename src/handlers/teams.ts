@@ -14,20 +14,50 @@
  * limitations under the License.
  */
 
+// Docs and markdown: https://learn.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/connectors-using?tabs=cURL
+
+
 import { AdaptiveCards } from "@microsoft/adaptivecards-tools";
 import { WebhookTarget } from "../WebHookTarget";
 import { IqWebhookPayloadApplicationEvaluation, IqWebhookPayloadWaiverRequest } from "../types";
 import { BaseHandler } from "./base";
-
-import template from "../templates/adaptive-card-default.json";
+import template from "../templates/adaptive-teams-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
+import { COLOR_ORANGE } from "../constants";
 import { HandlerNotImplementedError } from "../error"
 import { IQ_SERVER_URL } from ".."
 
 export class TeamsHandler extends BaseHandler {
     
     public handleWaiverRequest(payload: IqWebhookPayloadWaiverRequest, target: WebhookTarget): void {
-        throw new HandlerNotImplementedError("Method not implemented.")
+        const message = {
+            "@type": "MessageCard",
+            "@context": "http://schema.org/extensions",
+            "themeColor": COLOR_ORANGE,
+            "summary": "New Sonatype Platform Policy Waiver Request",
+            "sections": [{
+                "activityTitle": "New Sonatype Platform Policy Waiver Request",
+                "activitySubtitle": `Requested By: ${payload.initiator}`,
+                "facts": [ {
+                    "name": "Read More Here: ",
+                    "value": `[Violation Details](${payload.policyViolationLink})`
+                },{
+                    "name": "Request Note: ",
+                    "value": `\"${payload.comment}\"`
+                }],
+                "markdown": true
+            }],
+            "potentialAction": [ {
+                "@type": "OpenUri",
+                "name": "Create Waiver in the Sonatype Platform",
+                "targets": [{
+                    "os": "default",
+                    "uri": payload.addWaiverLink
+                }]
+            }]
+        }
+
+        target.sendMessage(message).catch(err => console.error(`Microsoft Teams Error ${err}: ${err.response.data}`))
     }
     
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
