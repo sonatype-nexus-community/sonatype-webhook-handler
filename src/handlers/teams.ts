@@ -25,6 +25,7 @@ import template from "../templates/adaptive-teams-card-default.json";
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
 import { COLOR_ORANGE } from "../constants";
 import { HandlerNotImplementedError } from "../error"
+import { IQ_SERVER_URL } from ".."
 
 export class TeamsHandler extends BaseHandler {
     
@@ -62,14 +63,15 @@ export class TeamsHandler extends BaseHandler {
     public handleApplicationEvaluation(payload: IqWebhookPayloadApplicationEvaluation, target: WebhookTarget): void {
         target.sendAdaptiveCard(
             AdaptiveCards.declare(template).render(
-            {
-                "title": `Sonatype Platform Scan Result for ${payload.applicationEvaluation.application.name}`,
-                "stage": payload.applicationEvaluation.stage,
-                "application": payload.applicationEvaluation.application.name,
-                "critical": payload.applicationEvaluation.criticalComponentCount,
-                "severe": payload.applicationEvaluation.severeComponentCount,
-                "reportUrl" : getIqUrlForApplicationEvaluation(payload)
-            })
+                {
+                    "title": `Sonatype Scan Result for ${payload.applicationEvaluation.application.name}`,
+                    "stage": payload.applicationEvaluation.stage,
+                    "application": payload.applicationEvaluation.application.name,
+                    "critical": payload.applicationEvaluation.criticalComponentCount,
+                    "severe": payload.applicationEvaluation.severeComponentCount,
+                    "reportUrl" : getIqUrlForApplicationEvaluation(IQ_SERVER_URL, payload)
+                }
+            )
         ).then(() => console.log("Send adaptive card successfully.")).catch(e => console.log(`Failed to send adaptive card. ${e}`))
     }
 }
