@@ -17,6 +17,7 @@
 //Create Issue with API Docs: https://blog.developer.atlassian.com/creating-a-jira-cloud-issue-in-a-single-rest-call/
 //Jira Markdown Docs: https://developer.atlassian.com/cloud/jira/platform/apis/document/nodes/blockquote/
 
+import { IQ_SERVER_URL } from ".."
 import { JiraWebhookTarget, WebhookTarget } from "../WebHookTarget"
 import { HandlerNotImplementedError } from "../error"
 import { getIqUrlForApplicationEvaluation } from "../helpers/iq";
@@ -169,7 +170,7 @@ export class JiraHandler extends BaseHandler {
                                         {
                                             "type": "link",
                                             "attrs": {
-                                                "href": getIqUrlForApplicationEvaluation(payload),
+                                                "href": getIqUrlForApplicationEvaluation(IQ_SERVER_URL, payload),
                                                 "title": "Sonatype Lifecycle URL"
                                             }
                                         }

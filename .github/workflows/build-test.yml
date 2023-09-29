@@ -32,6 +32,7 @@ jobs:
                   node-version: 18
             - run: npm i
             - run: npm run build
+            - run: npm run test:unit
 
     publish-dockerhub:
         runs-on: ubuntu-latest
