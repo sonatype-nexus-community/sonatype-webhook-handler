@@ -43,7 +43,7 @@ jobs:
                   node-version: ${{ env.NODE_VERSION }}
 
             - name: Build
-              run: npm run build && npm run test:unit
+              run: npm i && npm run build && npm run test:unit
 
             - name: Build Container and export to Docker
               uses: docker/build-push-action@v6
