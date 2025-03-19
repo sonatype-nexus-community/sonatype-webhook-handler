@@ -6,6 +6,7 @@
 [![GitHub issues](https://img.shields.io/github/issues/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/issues)
 [![GitHub forks](https://img.shields.io/github/forks/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/network)
 [![GitHub stars](https://img.shields.io/github/stars/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/stargazers)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sonatype-nexus-community_sonatype-webhook-handler&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sonatype-nexus-community_sonatype-webhook-handler)
 <!-- Add other badges or shields as appropriate -->
 
 ---
