@@ -1,25 +1,29 @@
 # Sonatype Lifecycle Webhook Handler
 
+<!-- Badges Section -->
 [![GitHub Action](https://img.shields.io/github/actions/workflow/status/sonatype-nexus-community/sonatype-webhook-handler/build-test.yml?branch=main&logo=GitHub&logoColor=white "build")](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/)
 [![GitHub license](https://img.shields.io/github/license/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/blob/main/LICENSE)
 [![GitHub issues](https://img.shields.io/github/issues/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/issues)
 [![GitHub forks](https://img.shields.io/github/forks/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/network)
 [![GitHub stars](https://img.shields.io/github/stars/sonatype-nexus-community/sonatype-webhook-handler)](https://github.com/sonatype-nexus-community/sonatype-webhook-handler/stargazers)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sonatype-nexus-community_sonatype-webhook-handler&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sonatype-nexus-community_sonatype-webhook-handler)
+<!-- Add other badges or shields as appropriate -->
 
-This project contains an example (working) Web Hook handler for [Sonatype Lifecycle](https://www.sonatype.com/products/open-source-security-dependency-management){:target="_blank"} that can publish messages to Microsoft Teams Channel(s), Slack Channel(s), or open Jira Issues.
+---
 
-**Contents**
+This project contains an example (working) Web Hook handler for [Sonatype Lifecycle](https://www.sonatype.com/products/open-source-security-dependency-management) that can publish messages to Microsoft Teams Channel(s), Slack Channel(s), or open Jira Issues.
 
 - [Configuration](#configuration)
-  - [Configure the Webhook Handler](#configure-the-webhook-handler)
   - [Configure Jira](#configure-jira)
   - [Configure Microsoft Teams](#configure-microsoft-teams)
   - [Configure Slack](#configure-slack)
+  - [Create a local config.json](#create-a-local-configjson)
   - [Configure Sonatype Lifecycle](#configure-sonatype-lifecycle)
 - [Running the Webook Handler](#running-the-webook-handler)
   - [As a Container](#as-a-container)
   - [Manually (from source) - not recommended](#manually-from-source---not-recommended)
 - [Testing](#testing)
+- [Development](#development)
 - [The Fine Print](#the-fine-print)
 
 
@@ -164,15 +168,18 @@ Your rules (as defined in your `config.json`) will be applied to the simulated p
 
 ![Installation Step 1](./images/example-ms-teeams-message.png)
 
+## Development
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+
 ## The Fine Print
 
 Remember:
 
-It is worth noting that this is **NOT SUPPORTED** by Sonatype, and is a contribution of ours to the open source
-community (read: you!)
+This project is part of the [Sonatype Nexus Community](https://github.com/sonatype-nexus-community) organization, which is not officially supported by Sonatype. Please review the latest pull requests, issues, and commits to understand this project's readiness for contribution and use.
 
-* Use this contribution at the risk tolerance that you have
-* Do NOT file Sonatype support tickets related to `sonatype-webhook-handler`
-* DO file issues here on GitHub, so that the community can pitch in
+* File suggestions and requests on this repo through GitHub Issues, so that the community can pitch in
+* Use or contribute to this project according to your organization's policies and your own risk tolerance
+* Don't file Sonatype support tickets related to this project— it won't reach the right people that way
 
-Phew, that was easier than I thought. Last but not least of all - have fun!
+Last but not least of all - have fun!
